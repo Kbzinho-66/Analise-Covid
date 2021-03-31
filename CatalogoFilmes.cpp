@@ -28,6 +28,7 @@ class Movie {
             this->url = url;
             this->directorID = directorID;
             //TODO Definir um diretor nullable https://www.bfilipek.com/2018/05/using-optional.html
+            //Teste
         }
 
         void printMovie() {
