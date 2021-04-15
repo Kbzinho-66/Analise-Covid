@@ -57,6 +57,10 @@ std::optional<std::string> searchDirectorMovieID(int id, FILE *directors);
 
 std::vector<Movie> searchDirectorName(std::string name, FILE *directors);
 
+void printDirectedMovies(std::vector<Movie> const &directedMovies, FILE *moviesFile);
+
+void printFile(FILE *arquivo);
+
 int main() {
 
     FILE *moviesFile, *directorsFile;
@@ -66,6 +70,8 @@ int main() {
     if (moviesFile == NULL) {
         cout << "Erro ao abrir o arquivo dos filmes." << endl;
         exit(0);
+    } else {
+        printFile(moviesFile);
     }
 
     directorsFile = fopen("directors.txt", "r");
@@ -130,16 +136,26 @@ int main() {
                 cout << "Insira o nome do diretor:" << endl;
                 std::string name;
                 cin >> name;
-                std::vector<Movie> directedMovies = (name, directorsFile);
+                std::vector<Movie> directedMovies = searchDirectorName(name, directorsFile);
 
+                if (directedMovies.size() > 0) {
+                    cout << "Diretor: " << name << endl;
+                    printDirectedMovies(directedMovies, moviesFile);
+                } else {
+                    cout << "Não foi encontrado nenhum filme dirigido por esse diretor" << endl;
+                }
+                
                 break;
             }
-            
+
             default:
                 break;
         }
 
     } while (resposta);
+
+    fclose(moviesFile);
+    fclose(directorsFile);
 
     return 0;
 }
@@ -173,18 +189,20 @@ void printMovie(std::optional<Movie> movie, std::optional<std::string> director)
     }
 }
 
-std::optional<Movie> searchMovieID(int id, FILE *movies) {
+std::optional<Movie> searchMovieID(int id, FILE *movies) { 
 
-    std::optional<Movie> temp = Movie();
+    /* Procura um filme por sua id */
 
-    while (fscanf(movies, "%d;%s;%d;%s;%d", &temp->movieID, temp->title, temp->releaseYear, temp->url, temp->directorID) > 0
-        && (temp->movieID != id)) {
+    Movie temp = Movie();
+
+    while (fscanf(movies, "%d;%s;%d;%s;%d", &temp.movieID, temp.title, &temp.releaseYear, temp.url, &temp.directorID) > 0
+        && (temp.movieID != id)) {
             temp.reset();
         }
 
     rewind(movies);
 
-    if (temp->movieID == id && temp->title != INVALID_STRING && temp->releaseYear != INVALID_NUMBER) {
+    if (temp.movieID == id && temp.title != INVALID_STRING && temp.releaseYear != INVALID_NUMBER) {
         return temp;
     } else {
         return std::nullopt;
@@ -192,6 +210,8 @@ std::optional<Movie> searchMovieID(int id, FILE *movies) {
 }
 
 std::optional<std::string> searchDirectorMovieID(int id, FILE *directors) {
+
+    /* Procura um diretor pelo id do filme que dirigiu */
 
     int movieID;
     std::optional<std::string> name;
@@ -213,6 +233,8 @@ std::optional<std::string> searchDirectorMovieID(int id, FILE *directors) {
 
 std::optional<Movie> searchMovieTitle(std::string title, FILE *movies) {
 
+    /* Procura um filme pelo título */
+
     std::optional<Movie> temp = Movie();
 
     while (fscanf(movies, "%d;%s;%d;%s;%d", &temp->movieID, temp->title, temp->releaseYear, temp->url, temp->directorID) > 0
@@ -231,26 +253,42 @@ std::optional<Movie> searchMovieTitle(std::string title, FILE *movies) {
 
 std::vector<Movie> searchDirectorName(std::string name, FILE *directors) {
 
-    int movieID;
-    std::string tempName;
-    std::vector<int> movieIds;
+    /* Procura um diretor por seu nome,
+    retorna um vetor de todos os filmes que dirigiu */
 
-    while (fscanf(directors, "%d,%s", &movieID, tempName) > 0) {
+    Movie temp;
+    std::vector<Movie> directedMovies;
 
-        if (tempName == name) {
-            movieIds.push_back(movieID);
+    while (fscanf(directors, "%d,%s", &temp.movieID, temp.title) > 0) {
+
+        if (temp.title == name) {
         }
 
-        movieID = INVALID_NUMBER;
-        tempName = INVALID_STRING;
+        temp.reset();
     }
 
     rewind(directors);
 
-    //TODO Terminar essa função
-    if (movieIds.size() > 0) {
-        return movieIds;
-    } else {
-        return 
+    return directedMovies;
+}
+
+void printDirectedMovies(std::vector<Movie> const &directedMovies, FILE *moviesFile) {
+
+    for (int i=0; i<directedMovies.size(); i++) {
+        cout << "Título: " << directedMovies.at(i).title << " (" << directedMovies.at(i).releaseYear << ")" << endl;
     }
+}
+
+void printFile(FILE *arquivo) {
+
+    int id,ano,directorid;
+    std::string title,url;
+
+    fscanf(arquivo, "%d\;%s\;%d\;%s\;%d", &id, &title, &ano, &url, &directorid);
+    cout << "id = " << id << endl;
+    cout << "title = " << title << endl;
+    cout << "ano = " << ano << endl;
+    cout << "url = " << url << endl;
+    cout << "directorId = " << directorid << endl;
+
 }
