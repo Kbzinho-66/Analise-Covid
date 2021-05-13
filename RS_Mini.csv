@@ -1,51 +1,51 @@
-"","Idade","DataNascimento","SexoBiologico","UF","GrupoAtendimento_Codigo","GrupoAtendimento_Nome","Categoria_Codigo","Categoria_Nome","FabricanteVacina","VacinaDose","Vacina_Codigo","Vacina_Nome"
-"1",54,"1966-10-25","F","RS",926,"Outros",9,"Trabalhadores de Saúde","FUNDACAO OSWALDO CRUZ","    1ª Dose",85,"Vacina Covid-19 - Covishield"
-"2",68,"1952-11-09","F","RS",202,"Pessoas de 65 a 69 anos",2,"Faixa Etária","FUNDACAO BUTANTAN","    1ª Dose",86,"Covid-19-Coronavac-Sinovac/Butantan"
-"3",60,"1960-07-27","F","RS",926,"Outros",9,"Trabalhadores de Saúde","FUNDACAO BUTANTAN","    1ª Dose",86,"Covid-19-Coronavac-Sinovac/Butantan"
-"4",73,"1947-12-24","M","RS",203,"Pessoas de 70 a 74 anos",2,"Faixa Etária","FUNDACAO BUTANTAN","    1ª Dose",86,"Covid-19-Coronavac-Sinovac/Butantan"
-"5",49,"1971-04-02","M","RS",927,"Auxiliar de Enfermagem",9,"Trabalhadores de Saúde","FUNDACAO BUTANTAN","    1ª Dose",86,"Covid-19-Coronavac-Sinovac/Butantan"
-"6",73,"1947-07-16","M","RS",203,"Pessoas de 70 a 74 anos",2,"Faixa Etária","FUNDACAO BUTANTAN","    1ª Dose",86,"Covid-19-Coronavac-Sinovac/Butantan"
-"7",32,"1988-03-30","F","RS",905,"Cuidador de Idosos",9,"Trabalhadores de Saúde","Covid-19 - Coronavac","    2ª Dose",86,"Covid-19-Coronavac-Sinovac/Butantan"
-"8",73,"1947-05-28","M","RS",203,"Pessoas de 70 a 74 anos",2,"Faixa Etária","FUNDACAO BUTANTAN","    1ª Dose",86,"Covid-19-Coronavac-Sinovac/Butantan"
-"9",38,"1982-04-29","F","RS",907,"Enfermeiro(a)",9,"Trabalhadores de Saúde","FUNDACAO BUTANTAN","    2ª Dose",86,"Covid-19-Coronavac-Sinovac/Butantan"
-"10",74,"1946-04-15","M","RS",204,"Pessoas de 75 a 79 anos",2,"Faixa Etária","FUNDACAO BUTANTAN","    1ª Dose",86,"Covid-19-Coronavac-Sinovac/Butantan"
-"11",84,"1936-09-23","F","RS",205,"Pessoas de 80 anos ou mais",2,"Faixa Etária","FUNDACAO BUTANTAN","    1ª Dose",86,"Covid-19-Coronavac-Sinovac/Butantan"
-"12",72,"1949-03-04","F","RS",203,"Pessoas de 70 a 74 anos",2,"Faixa Etária","FUNDACAO BUTANTAN","    1ª Dose",86,"Covid-19-Coronavac-Sinovac/Butantan"
-"13",82,"1938-04-29","M","RS",205,"Pessoas de 80 anos ou mais",2,"Faixa Etária","FUNDACAO OSWALDO CRUZ","    1ª Dose",85,"Vacina Covid-19 - Covishield"
-"14",74,"1946-12-14","F","RS",203,"Pessoas de 70 a 74 anos",2,"Faixa Etária","FUNDACAO BUTANTAN","    1ª Dose",86,"Covid-19-Coronavac-Sinovac/Butantan"
-"15",33,"1987-02-23","F","RS",1101,"Pessoas com Deficiência Institucionalizadas",11,"Pessoas com Deficiência","FUNDACAO BUTANTAN","    1ª Dose",86,"Covid-19-Coronavac-Sinovac/Butantan"
-"16",77,"1943-05-27","F","RS",204,"Pessoas de 75 a 79 anos",2,"Faixa Etária","FUNDACAO BUTANTAN","    1ª Dose",86,"Covid-19-Coronavac-Sinovac/Butantan"
-"17",89,"1931-09-05","F","RS",205,"Pessoas de 80 anos ou mais",2,"Faixa Etária","FUNDACAO BUTANTAN","    1ª Dose",86,"Covid-19-Coronavac-Sinovac/Butantan"
-"18",71,"1949-10-18","F","RS",203,"Pessoas de 70 a 74 anos",2,"Faixa Etária","FUNDACAO BUTANTAN","    1ª Dose",86,"Covid-19-Coronavac-Sinovac/Butantan"
-"19",46,"1974-08-20","F","RS",923,"Técnico de Enfermagem",9,"Trabalhadores de Saúde","FUNDACAO OSWALDO CRUZ","    1ª Dose",85,"Vacina Covid-19 - Covishield"
-"20",71,"1949-07-02","F","RS",203,"Pessoas de 70 a 74 anos",2,"Faixa Etária","FUNDACAO BUTANTAN","    1ª Dose",86,"Covid-19-Coronavac-Sinovac/Butantan"
-"21",76,"1944-08-05","M","RS",104,"Doença Pulmonar Obstrutiva Crônica",1,"Comorbidades","FUNDACAO BUTANTAN","    1ª Dose",86,"Covid-19-Coronavac-Sinovac/Butantan"
-"22",78,"1943-02-28","F","RS",204,"Pessoas de 75 a 79 anos",2,"Faixa Etária","FUNDACAO BUTANTAN","    1ª Dose",86,"Covid-19-Coronavac-Sinovac/Butantan"
-"23",48,"1972-04-02","F","RS",920,"Recepcionista",9,"Trabalhadores de Saúde","FUNDACAO BUTANTAN","    2ª Dose",86,"Covid-19-Coronavac-Sinovac/Butantan"
-"24",61,"1959-09-07","F","RS",905,"Cuidador de Idosos",9,"Trabalhadores de Saúde","FUNDACAO BUTANTAN","    1ª Dose",86,"Covid-19-Coronavac-Sinovac/Butantan"
-"25",68,"1952-05-22","M","RS",912,"Médico",9,"Trabalhadores de Saúde","FUNDACAO BUTANTAN","    1ª Dose",86,"Covid-19-Coronavac-Sinovac/Butantan"
-"26",74,"1946-10-03","F","RS",203,"Pessoas de 70 a 74 anos",2,"Faixa Etária","FUNDACAO BUTANTAN","    1ª Dose",86,"Covid-19-Coronavac-Sinovac/Butantan"
-"27",42,"1978-03-31","F","RS",918,"Profissionais de Educação Física",9,"Trabalhadores de Saúde","FUNDACAO BUTANTAN","    1ª Dose",86,"Covid-19-Coronavac-Sinovac/Butantan"
-"28",92,"1929-01-01","F","RS",205,"Pessoas de 80 anos ou mais",2,"Faixa Etária","FUNDACAO BUTANTAN","    2ª Dose",86,"Covid-19-Coronavac-Sinovac/Butantan"
-"29",81,"1939-06-05","M","RS",205,"Pessoas de 80 anos ou mais",2,"Faixa Etária","FUNDACAO BUTANTAN","    1ª Dose",86,"Covid-19-Coronavac-Sinovac/Butantan"
-"30",75,"1945-04-04","F","RS",204,"Pessoas de 75 a 79 anos",2,"Faixa Etária","FUNDACAO BUTANTAN","    1ª Dose",86,"Covid-19-Coronavac-Sinovac/Butantan"
-"31",84,"1936-12-26","F","RS",205,"Pessoas de 80 anos ou mais",2,"Faixa Etária","FUNDACAO OSWALDO CRUZ","    1ª Dose",85,"Vacina Covid-19 - Covishield"
-"32",73,"1948-03-04","F","RS",203,"Pessoas de 70 a 74 anos",2,"Faixa Etária","FUNDACAO BUTANTAN","    1ª Dose",86,"Covid-19-Coronavac-Sinovac/Butantan"
-"33",48,"1972-06-09","M","RS",920,"Recepcionista",9,"Trabalhadores de Saúde","Covid-19 - Coronavac","    1ª Dose",86,"Covid-19-Coronavac-Sinovac/Butantan"
-"34",80,"1941-02-14","M","RS",205,"Pessoas de 80 anos ou mais",2,"Faixa Etária","FUNDACAO BUTANTAN","    1ª Dose",86,"Covid-19-Coronavac-Sinovac/Butantan"
-"35",60,"1960-04-01","F","RS",905,"Cuidador de Idosos",9,"Trabalhadores de Saúde","FUNDACAO OSWALDO CRUZ","    1ª Dose",85,"Vacina Covid-19 - Covishield"
-"36",85,"1935-12-06","M","RS",205,"Pessoas de 80 anos ou mais",2,"Faixa Etária","FUNDACAO BUTANTAN","    2ª Dose",86,"Covid-19-Coronavac-Sinovac/Butantan"
-"37",85,"1935-11-11","F","RS",301,"Pessoas de 60 nos ou mais Institucionalizadas",3,"Pessoas de 60 anos ou mais institucionalizadas","FUNDACAO BUTANTAN","    2ª Dose",86,"Covid-19-Coronavac-Sinovac/Butantan"
-"38",72,"1948-11-05","M","RS",203,"Pessoas de 70 a 74 anos",2,"Faixa Etária","FUNDACAO BUTANTAN","    1ª Dose",86,"Covid-19-Coronavac-Sinovac/Butantan"
-"39",67,"1953-02-22","M","RS",202,"Pessoas de 65 a 69 anos",2,"Faixa Etária","FUNDACAO BUTANTAN","    1ª Dose",86,"Covid-19-Coronavac-Sinovac/Butantan"
-"40",70,"1950-10-01","M","RS",203,"Pessoas de 70 a 74 anos",2,"Faixa Etária","FUNDACAO BUTANTAN","    1ª Dose",86,"Covid-19-Coronavac-Sinovac/Butantan"
-"41",82,"1938-08-09","M","RS",205,"Pessoas de 80 anos ou mais",2,"Faixa Etária","FUNDACAO BUTANTAN","    1ª Dose",86,"Covid-19-Coronavac-Sinovac/Butantan"
-"42",68,"1952-04-18","F","RS",202,"Pessoas de 65 a 69 anos",2,"Faixa Etária","FUNDACAO BUTANTAN","    1ª Dose",86,"Covid-19-Coronavac-Sinovac/Butantan"
-"43",34,"1986-06-20","F","RS",923,"Técnico de Enfermagem",9,"Trabalhadores de Saúde","FUNDACAO BUTANTAN","    2ª Dose",86,"Covid-19-Coronavac-Sinovac/Butantan"
-"44",74,"1946-10-17","F","RS",203,"Pessoas de 70 a 74 anos",2,"Faixa Etária","FUNDACAO BUTANTAN","    1ª Dose",86,"Covid-19-Coronavac-Sinovac/Butantan"
-"45",84,"1936-06-02","F","RS",301,"Pessoas de 60 nos ou mais Institucionalizadas",3,"Pessoas de 60 anos ou mais institucionalizadas","FUNDACAO BUTANTAN","    1ª Dose",86,"Covid-19-Coronavac-Sinovac/Butantan"
-"46",70,"1951-01-07","F","RS",202,"Pessoas de 65 a 69 anos",2,"Faixa Etária","FUNDACAO BUTANTAN","    1ª Dose",86,"Covid-19-Coronavac-Sinovac/Butantan"
-"47",43,"1977-09-03","F","RS",923,"Técnico de Enfermagem",9,"Trabalhadores de Saúde","FUNDACAO BUTANTAN","    1ª Dose",86,"Covid-19-Coronavac-Sinovac/Butantan"
-"48",90,"1930-08-22","F","RS",205,"Pessoas de 80 anos ou mais",2,"Faixa Etária","FUNDACAO BUTANTAN","    2ª Dose",86,"Covid-19-Coronavac-Sinovac/Butantan"
-"49",91,"1929-12-24","F","RS",205,"Pessoas de 80 anos ou mais",2,"Faixa Etária","FUNDACAO BUTANTAN","    1ª Dose",86,"Covid-19-Coronavac-Sinovac/Butantan"
-"50",91,"1929-09-02","M","RS",205,"Pessoas de 80 anos ou mais",2,"Faixa Etária","FUNDACAO BUTANTAN","    2ª Dose",86,"Covid-19-Coronavac-Sinovac/Butantan"
+﻿Paciente_Codigo,Idade,DataNascimento,SexoBiologico,GrupoAtendimento_Codigo,GrupoAtendimento_Nome,Categoria_Codigo,Categoria_Nome,FabricanteVacina,VacinaDose,Vacina_Codigo,Vacina_Nome
+1,54,1966-10-25,F,926,Outros,9,Trabalhadores de Saúde,FUNDACAO OSWALDO CRUZ,    1ª Dose,85,Vacina Covid-19 - Covishield
+2,68,1952-11-09,F,202,Pessoas de 65 a 69 anos,2,Faixa Etária,FUNDACAO BUTANTAN,    1ª Dose,86,Covid-19-Coronavac-Sinovac/Butantan
+3,60,1960-07-27,F,926,Outros,9,Trabalhadores de Saúde,FUNDACAO BUTANTAN,    1ª Dose,86,Covid-19-Coronavac-Sinovac/Butantan
+4,73,1947-12-24,M,203,Pessoas de 70 a 74 anos,2,Faixa Etária,FUNDACAO BUTANTAN,    1ª Dose,86,Covid-19-Coronavac-Sinovac/Butantan
+5,49,1971-04-02,M,927,Auxiliar de Enfermagem,9,Trabalhadores de Saúde,FUNDACAO BUTANTAN,    1ª Dose,86,Covid-19-Coronavac-Sinovac/Butantan
+6,73,1947-07-16,M,203,Pessoas de 70 a 74 anos,2,Faixa Etária,FUNDACAO BUTANTAN,    1ª Dose,86,Covid-19-Coronavac-Sinovac/Butantan
+7,32,1988-03-30,F,905,Cuidador de Idosos,9,Trabalhadores de Saúde,Covid-19 - Coronavac,    2ª Dose,86,Covid-19-Coronavac-Sinovac/Butantan
+8,73,1947-05-28,M,203,Pessoas de 70 a 74 anos,2,Faixa Etária,FUNDACAO BUTANTAN,    1ª Dose,86,Covid-19-Coronavac-Sinovac/Butantan
+9,38,1982-04-29,F,907,Enfermeiro(a),9,Trabalhadores de Saúde,FUNDACAO BUTANTAN,    2ª Dose,86,Covid-19-Coronavac-Sinovac/Butantan
+10,74,1946-04-15,M,204,Pessoas de 75 a 79 anos,2,Faixa Etária,FUNDACAO BUTANTAN,    1ª Dose,86,Covid-19-Coronavac-Sinovac/Butantan
+11,84,1936-09-23,F,205,Pessoas de 80 anos ou mais,2,Faixa Etária,FUNDACAO BUTANTAN,    1ª Dose,86,Covid-19-Coronavac-Sinovac/Butantan
+12,72,1949-03-04,F,203,Pessoas de 70 a 74 anos,2,Faixa Etária,FUNDACAO BUTANTAN,    1ª Dose,86,Covid-19-Coronavac-Sinovac/Butantan
+13,82,1938-04-29,M,205,Pessoas de 80 anos ou mais,2,Faixa Etária,FUNDACAO OSWALDO CRUZ,    1ª Dose,85,Vacina Covid-19 - Covishield
+14,74,1946-12-14,F,203,Pessoas de 70 a 74 anos,2,Faixa Etária,FUNDACAO BUTANTAN,    1ª Dose,86,Covid-19-Coronavac-Sinovac/Butantan
+15,33,1987-02-23,F,1101,Pessoas com Deficiência Institucionalizadas,11,Pessoas com Deficiência,FUNDACAO BUTANTAN,    1ª Dose,86,Covid-19-Coronavac-Sinovac/Butantan
+16,77,1943-05-27,F,204,Pessoas de 75 a 79 anos,2,Faixa Etária,FUNDACAO BUTANTAN,    1ª Dose,86,Covid-19-Coronavac-Sinovac/Butantan
+17,89,1931-09-05,F,205,Pessoas de 80 anos ou mais,2,Faixa Etária,FUNDACAO BUTANTAN,    1ª Dose,86,Covid-19-Coronavac-Sinovac/Butantan
+18,71,1949-10-18,F,203,Pessoas de 70 a 74 anos,2,Faixa Etária,FUNDACAO BUTANTAN,    1ª Dose,86,Covid-19-Coronavac-Sinovac/Butantan
+19,46,1974-08-20,F,923,Técnico de Enfermagem,9,Trabalhadores de Saúde,FUNDACAO OSWALDO CRUZ,    1ª Dose,85,Vacina Covid-19 - Covishield
+20,71,1949-07-02,F,203,Pessoas de 70 a 74 anos,2,Faixa Etária,FUNDACAO BUTANTAN,    1ª Dose,86,Covid-19-Coronavac-Sinovac/Butantan
+21,76,1944-08-05,M,104,Doença Pulmonar Obstrutiva Crônica,1,Comorbidades,FUNDACAO BUTANTAN,    1ª Dose,86,Covid-19-Coronavac-Sinovac/Butantan
+22,78,1943-02-28,F,204,Pessoas de 75 a 79 anos,2,Faixa Etária,FUNDACAO BUTANTAN,    1ª Dose,86,Covid-19-Coronavac-Sinovac/Butantan
+23,48,1972-04-02,F,920,Recepcionista,9,Trabalhadores de Saúde,FUNDACAO BUTANTAN,    2ª Dose,86,Covid-19-Coronavac-Sinovac/Butantan
+24,61,1959-09-07,F,905,Cuidador de Idosos,9,Trabalhadores de Saúde,FUNDACAO BUTANTAN,    1ª Dose,86,Covid-19-Coronavac-Sinovac/Butantan
+25,68,1952-05-22,M,912,Médico,9,Trabalhadores de Saúde,FUNDACAO BUTANTAN,    1ª Dose,86,Covid-19-Coronavac-Sinovac/Butantan
+26,74,1946-10-03,F,203,Pessoas de 70 a 74 anos,2,Faixa Etária,FUNDACAO BUTANTAN,    1ª Dose,86,Covid-19-Coronavac-Sinovac/Butantan
+27,42,1978-03-31,F,918,Profissionais de Educação Física,9,Trabalhadores de Saúde,FUNDACAO BUTANTAN,    1ª Dose,86,Covid-19-Coronavac-Sinovac/Butantan
+28,92,1929-01-01,F,205,Pessoas de 80 anos ou mais,2,Faixa Etária,FUNDACAO BUTANTAN,    2ª Dose,86,Covid-19-Coronavac-Sinovac/Butantan
+29,81,1939-06-05,M,205,Pessoas de 80 anos ou mais,2,Faixa Etária,FUNDACAO BUTANTAN,    1ª Dose,86,Covid-19-Coronavac-Sinovac/Butantan
+30,75,1945-04-04,F,204,Pessoas de 75 a 79 anos,2,Faixa Etária,FUNDACAO BUTANTAN,    1ª Dose,86,Covid-19-Coronavac-Sinovac/Butantan
+31,84,1936-12-26,F,205,Pessoas de 80 anos ou mais,2,Faixa Etária,FUNDACAO OSWALDO CRUZ,    1ª Dose,85,Vacina Covid-19 - Covishield
+32,73,1948-03-04,F,203,Pessoas de 70 a 74 anos,2,Faixa Etária,FUNDACAO BUTANTAN,    1ª Dose,86,Covid-19-Coronavac-Sinovac/Butantan
+33,48,1972-06-09,M,920,Recepcionista,9,Trabalhadores de Saúde,Covid-19 - Coronavac,    1ª Dose,86,Covid-19-Coronavac-Sinovac/Butantan
+34,80,1941-02-14,M,205,Pessoas de 80 anos ou mais,2,Faixa Etária,FUNDACAO BUTANTAN,    1ª Dose,86,Covid-19-Coronavac-Sinovac/Butantan
+35,60,1960-04-01,F,905,Cuidador de Idosos,9,Trabalhadores de Saúde,FUNDACAO OSWALDO CRUZ,    1ª Dose,85,Vacina Covid-19 - Covishield
+36,85,1935-12-06,M,205,Pessoas de 80 anos ou mais,2,Faixa Etária,FUNDACAO BUTANTAN,    2ª Dose,86,Covid-19-Coronavac-Sinovac/Butantan
+37,85,1935-11-11,F,301,Pessoas de 60 nos ou mais Institucionalizadas,3,Pessoas de 60 anos ou mais institucionalizadas,FUNDACAO BUTANTAN,    2ª Dose,86,Covid-19-Coronavac-Sinovac/Butantan
+38,72,1948-11-05,M,203,Pessoas de 70 a 74 anos,2,Faixa Etária,FUNDACAO BUTANTAN,    1ª Dose,86,Covid-19-Coronavac-Sinovac/Butantan
+39,67,1953-02-22,M,202,Pessoas de 65 a 69 anos,2,Faixa Etária,FUNDACAO BUTANTAN,    1ª Dose,86,Covid-19-Coronavac-Sinovac/Butantan
+40,70,1950-10-01,M,203,Pessoas de 70 a 74 anos,2,Faixa Etária,FUNDACAO BUTANTAN,    1ª Dose,86,Covid-19-Coronavac-Sinovac/Butantan
+41,82,1938-08-09,M,205,Pessoas de 80 anos ou mais,2,Faixa Etária,FUNDACAO BUTANTAN,    1ª Dose,86,Covid-19-Coronavac-Sinovac/Butantan
+42,68,1952-04-18,F,202,Pessoas de 65 a 69 anos,2,Faixa Etária,FUNDACAO BUTANTAN,    1ª Dose,86,Covid-19-Coronavac-Sinovac/Butantan
+43,34,1986-06-20,F,923,Técnico de Enfermagem,9,Trabalhadores de Saúde,FUNDACAO BUTANTAN,    2ª Dose,86,Covid-19-Coronavac-Sinovac/Butantan
+44,74,1946-10-17,F,203,Pessoas de 70 a 74 anos,2,Faixa Etária,FUNDACAO BUTANTAN,    1ª Dose,86,Covid-19-Coronavac-Sinovac/Butantan
+45,84,1936-06-02,F,301,Pessoas de 60 nos ou mais Institucionalizadas,3,Pessoas de 60 anos ou mais institucionalizadas,FUNDACAO BUTANTAN,    1ª Dose,86,Covid-19-Coronavac-Sinovac/Butantan
+46,70,1951-01-07,F,202,Pessoas de 65 a 69 anos,2,Faixa Etária,FUNDACAO BUTANTAN,    1ª Dose,86,Covid-19-Coronavac-Sinovac/Butantan
+47,43,1977-09-03,F,923,Técnico de Enfermagem,9,Trabalhadores de Saúde,FUNDACAO BUTANTAN,    1ª Dose,86,Covid-19-Coronavac-Sinovac/Butantan
+48,90,1930-08-22,F,205,Pessoas de 80 anos ou mais,2,Faixa Etária,FUNDACAO BUTANTAN,    2ª Dose,86,Covid-19-Coronavac-Sinovac/Butantan
+49,91,1929-12-24,F,205,Pessoas de 80 anos ou mais,2,Faixa Etária,FUNDACAO BUTANTAN,    1ª Dose,86,Covid-19-Coronavac-Sinovac/Butantan
+50,91,1929-09-02,M,205,Pessoas de 80 anos ou mais,2,Faixa Etária,FUNDACAO BUTANTAN,    2ª Dose,86,Covid-19-Coronavac-Sinovac/Butantan
