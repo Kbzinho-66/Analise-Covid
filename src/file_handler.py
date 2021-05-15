@@ -2,43 +2,22 @@ import csv
 import shelve
 
 
-class Registro:
+def _create_shelf():
+    """
+    Abre um arquivo binário .shelf que vai conter todos os registros
+    presentes no arquivo .csv
 
-    def __init__(self, paciente_codigo,
-                 idade, data_nascimento, sexo_biologico, grupo_atendimento_codigo, grupo_atendimento_nome,
-                 categoria_codigo, categoria_nome, fabricante_vacina, vacina_dose, vacina_codigo, vacina_nome):
-        self.paciente_codigo = paciente_codigo
-        self.idade = idade
-        self.data_nascimento = data_nascimento
-        self.sexo_biologico = sexo_biologico  # Quem sabe um enum
-        self.grupo_atendimento_codigo = grupo_atendimento_codigo
-        self.grupo_atendimento_nome = grupo_atendimento_nome
-        self.categoria_codigo = categoria_codigo
-        self.categoria_nome = categoria_nome
-        self.fabricante_vacina = fabricante_vacina
-        self.vacina_dose = vacina_dose
-        self.vacina_codigo = vacina_codigo
-        self.vacina_nome = vacina_nome
+    Essa função é chamada exclusivamente quando não é encontrado
+    um arquivo .shelf em verify_shelf() e não deve ser chamada diretamente.
+    """
 
-    def __str__(self):
-        return ("""Código Paciente: {}\t Idade: {}\t Data de Nascimento: {}\t Sexo Biológico: {}
-                 Nome Grupo: {}\t Nome Categoria: {}
-                 Fabricante Vacina: {}\t Dose da Vacina: {}\t Nome Vacina: {}\n """
-                .format(self.paciente_codigo, self.idade, self.data_nascimento, self.sexo_biologico,
-                        self.grupo_atendimento_nome, self.categoria_nome,
-                        self.fabricante_vacina, self.vacina_dose, self.vacina_nome))
-
-    def __iter__(self):
-        return self
-
-
-def create_shelf():
-    with shelve.open("RS_Binario") as shelf_rs:
+    with shelve.open("RS_Binario.shelf") as shelf_rs:
         with open("RS_Mini.csv", newline='') as text_file:
             reader = csv.reader(text_file, delimiter=',')
             next(reader)  # Pular o header
 
             for row in reader:
+                # TODO (Mudar pra RegistryModel)
                 patient = Registro(row[0], int(row[1]), row[2],
                                    row[3], int(row[4]), row[5],
                                    int(row[6]), row[7], row[8],
@@ -49,28 +28,41 @@ def create_shelf():
     shelf_rs.close()
 
 
-def read_from_shelf():
-    with shelve.open("RS_Binario") as shelf_rs:
-        for patient_id in shelf_rs:
-            print(patient_id, shelf_rs[patient_id])
+def _read_from_shelf():
+    """
+    Lê o arquivo .shelf e por enquanto mostra todos os registros,
+    mas no futuro deve ser a função usada para a leitura exaustiva do arquivo.
+
+    Essa função é chamada exclusivamente quando é encontrado um arquivo .shelf
+    em verify_shelf() e não deve ser chamada diretamente.
+    """
+    with shelve.open("RS_Binario.shelf") as shelf_rs:
+        for codigo in shelf_rs:
+            print(codigo, shelf_rs[codigo])
 
 
 def verify_shelf():
+    """
+    Verifica a existência do arquivo binário .shelf. Caso ele já exista,
+    invoca a leitura exaustiva do arquivo; caso não exista, invoca a
+    criação de um.
+
+    Qualquer leitura do arquivo binário deve ser feita através dessa função
+    para garantir a existência dos arquivos.
+    """
     try:
-        with shelve.open("RS_Binario"):
-            read_from_shelf()
+        with shelve.open("RS_Binario.shelf"):
+            _read_from_shelf()
     except IOError:
-        create_shelf()
-        read_from_shelf()
+        _create_shelf()
+        _read_from_shelf()
 
 
 def main():
+
     verify_shelf()
 
     """
-    if !(ja tem o arquivo shelve) {
-        criar um shelve a partir do csv
-    }
     
     if !(Ja tem os arquivos de indices) {
         gerar os arquivos de índice para código do paciente e fabricante da vacina
@@ -78,7 +70,7 @@ def main():
     
     gerar as estruturas de índice em memória (hash pra data de aplicação da vacina e
                                               árvore binaria pra cidade da aplicação da vacina)
-    consultar dados a partir das estruturas de índices
+    consultar dados a partir das estruturas de índices, tanto em arquivos quanto em memória
     
     """
 
