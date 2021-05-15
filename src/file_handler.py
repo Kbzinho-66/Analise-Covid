@@ -1,5 +1,5 @@
 import csv
-import pickle
+import shelve
 
 
 class Registro:
@@ -32,36 +32,40 @@ class Registro:
         return self
 
 
-def write_to_pickle():
-    output_file = open("RS.pickle", "wb")
-    with open("RS_Mini.csv", newline='') as input_file:
-        reader = csv.reader(input_file, delimiter=',')
-        next(reader)  # Pular o header
+def create_shelf():
+    with shelve.open("RS_Binario") as shelf_rs:
+        with open("RS_Mini.csv", newline='') as text_file:
+            reader = csv.reader(text_file, delimiter=',')
+            next(reader)  # Pular o header
 
-        for row in reader:
-            patient = Registro(int(row[0]), int(row[1]), row[2],
-                               row[3], int(row[4]), row[5],
-                               int(row[6]), row[7], row[8],
-                               row[9], int(row[10]), row[11])  # Deve ter um jeito melhor de fazer isso
-            pickle.dump(patient, output_file)
-        output_file.close()
+            for row in reader:
+                patient = Registro(row[0], int(row[1]), row[2],
+                                   row[3], int(row[4]), row[5],
+                                   int(row[6]), row[7], row[8],
+                                   row[9], int(row[10]), row[11])  # Deve ter um jeito melhor de fazer isso
+                shelf_rs[patient.paciente_codigo] = patient
+
+    text_file.close()
+    shelf_rs.close()
 
 
-def read_from_pickle():
-    # Por enquanto só mostra todos os registros
-    input_file = open("RS.pickle", "rb")
+def read_from_shelf():
+    with shelve.open("RS_Binario") as shelf_rs:
+        for patient_id in shelf_rs:
+            print(patient_id, shelf_rs[patient_id])
 
-    while True:
-        try:
-            print(pickle.load(input_file))
-        except EOFError:
-            break
-    input_file.close()
+
+def verify_shelf():
+    try:
+        with shelve.open("RS_Binario"):
+            read_from_shelf()
+    except IOError:
+        create_shelf()
+        read_from_shelf()
 
 
 def main():
-    write_to_pickle()
-    read_from_pickle()
+    verify_shelf()
 
     """
     if !(ja tem o arquivo shelve) {
