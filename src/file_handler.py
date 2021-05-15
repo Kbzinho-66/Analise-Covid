@@ -63,6 +63,21 @@ def main():
     write_to_pickle()
     read_from_pickle()
 
+    """
+    if !(ja tem o arquivo shelve) {
+        criar um shelve a partir do csv
+    }
+    
+    if !(Ja tem os arquivos de indices) {
+        gerar os arquivos de índice para código do paciente e fabricante da vacina
+    }
+    
+    gerar as estruturas de índice em memória (hash pra data de aplicação da vacina e
+                                              árvore binaria pra cidade da aplicação da vacina)
+    consultar dados a partir das estruturas de índices
+    
+    """
+
 
 if __name__ == '__main__':
     main()
