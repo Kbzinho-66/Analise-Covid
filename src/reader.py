@@ -35,6 +35,12 @@ class ReaderCSV:
 
         reader = csv.reader(raw)
 
+        """
+        Aqui vai retornar todas as entradas do csv.
+        Talvez seja o caso de fazer aos poucos leitura
+        se o arquivo for muito grande, ou então ir só
+        gerando o objeto e guardando ele no arquivo
+        """
         for row in reader:
             print(row)
 
