@@ -34,9 +34,9 @@
 #include <cstdint>
 #include <functional>
 
-#include "cereal/macros.hpp"
-#include "cereal/specialize.hpp"
-#include "cereal/details/helpers.hpp"
+#include "/home/marcello/Documents/repositories/Analise-Covid/src/cereal/macros.hpp"
+#include "/home/marcello/Documents/repositories/Analise-Covid/src/cereal/specialize.hpp"
+#include "/home/marcello/Documents/repositories/Analise-Covid/src/cereal/details/helpers.hpp"
 
 namespace cereal
 {

@@ -4,7 +4,7 @@
     These macros can assist in determining the version of cereal. Be
     warned that cereal is not guaranteed to be compatible across
     different versions. For more information on releases of cereal,
-    see https://github.com/USCiLab/cereal/releases.
+    see https://github.com/USCiLab//home/marcello/Documents/repositories/Analise-Covid/src/cereal/releases.
 
     \ingroup utility */
 /*

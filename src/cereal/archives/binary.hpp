@@ -29,7 +29,7 @@
 #ifndef CEREAL_ARCHIVES_BINARY_HPP_
 #define CEREAL_ARCHIVES_BINARY_HPP_
 
-#include "cereal/cereal.hpp"
+#include "/home/marcello/Documents/repositories/Analise-Covid/src/cereal/cereal.hpp"
 #include <sstream>
 
 namespace cereal

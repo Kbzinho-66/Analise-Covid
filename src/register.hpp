@@ -1,5 +1,6 @@
 #include <string>
 #include <iostream>
+#include "/home/marcello/Documents/repositories/Analise-Covid/src/cereal/types/string.hpp"
 
 class Register
 {
@@ -19,6 +20,9 @@ public:
              std::string vaccination_city,
              std::string category_name);
     void printRegister();
+
+    template <class Archive> void serialize(Archive &ar);
+
     ~Register();
 };
 
@@ -47,6 +51,11 @@ void Register::printRegister()
     std::cout << "Categoria " << this->category_name << std::endl;
 
     std::cout << std::endl;
+}
+
+template <class Archive> void  Register::serialize(Archive &ar)
+{
+    ar(this->patient_code, this->patient_age, this->patient_b_day);
 }
 
 Register::~Register()

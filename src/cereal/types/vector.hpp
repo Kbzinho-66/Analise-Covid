@@ -30,7 +30,7 @@
 #ifndef CEREAL_TYPES_VECTOR_HPP_
 #define CEREAL_TYPES_VECTOR_HPP_
 
-#include "cereal/cereal.hpp"
+#include "/home/marcello/Documents/repositories/Analise-Covid/src/cereal/cereal.hpp"
 #include <vector>
 
 namespace cereal

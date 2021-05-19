@@ -28,12 +28,12 @@
 */
 #ifndef CEREAL_ARCHIVES_XML_HPP_
 #define CEREAL_ARCHIVES_XML_HPP_
-#include "cereal/cereal.hpp"
-#include "cereal/details/util.hpp"
+#include "/home/marcello/Documents/repositories/Analise-Covid/src/cereal/cereal.hpp"
+#include "/home/marcello/Documents/repositories/Analise-Covid/src/cereal/details/util.hpp"
 
-#include "cereal/external/rapidxml/rapidxml.hpp"
-#include "cereal/external/rapidxml/rapidxml_print.hpp"
-#include "cereal/external/base64.hpp"
+#include "/home/marcello/Documents/repositories/Analise-Covid/src/cereal/external/rapidxml/rapidxml.hpp"
+#include "/home/marcello/Documents/repositories/Analise-Covid/src/cereal/external/rapidxml/rapidxml_print.hpp"
+#include "/home/marcello/Documents/repositories/Analise-Covid/src/cereal/external/base64.hpp"
 
 #include <sstream>
 #include <stack>

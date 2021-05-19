@@ -29,8 +29,8 @@
 #ifndef CEREAL_ARCHIVES_JSON_HPP_
 #define CEREAL_ARCHIVES_JSON_HPP_
 
-#include "cereal/cereal.hpp"
-#include "cereal/details/util.hpp"
+#include "/home/marcello/Documents/repositories/Analise-Covid/src/cereal/cereal.hpp"
+#include "/home/marcello/Documents/repositories/Analise-Covid/src/cereal/details/util.hpp"
 
 namespace cereal
 {
@@ -61,11 +61,11 @@ namespace cereal
 #define CEREAL_RAPIDJSON_PARSE_DEFAULT_FLAGS kParseFullPrecisionFlag | kParseNanAndInfFlag
 #endif
 
-#include "cereal/external/rapidjson/prettywriter.h"
-#include "cereal/external/rapidjson/ostreamwrapper.h"
-#include "cereal/external/rapidjson/istreamwrapper.h"
-#include "cereal/external/rapidjson/document.h"
-#include "cereal/external/base64.hpp"
+#include "/home/marcello/Documents/repositories/Analise-Covid/src/cereal/external/rapidjson/prettywriter.h"
+#include "/home/marcello/Documents/repositories/Analise-Covid/src/cereal/external/rapidjson/ostreamwrapper.h"
+#include "/home/marcello/Documents/repositories/Analise-Covid/src/cereal/external/rapidjson/istreamwrapper.h"
+#include "/home/marcello/Documents/repositories/Analise-Covid/src/cereal/external/rapidjson/document.h"
+#include "/home/marcello/Documents/repositories/Analise-Covid/src/cereal/external/base64.hpp"
 
 #include <limits>
 #include <sstream>
