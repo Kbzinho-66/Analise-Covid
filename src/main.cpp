@@ -93,7 +93,7 @@ void getRegistryByCode(int code) {
 
     array<int, 3> addresses;
     // A posição no vetor é o código + 1, o valor, o endereço
-    addresses[2] = 236;
+    addresses[2] = 292;
     
     Registry temp;
 
@@ -106,7 +106,7 @@ void getRegistryByCode(int code) {
 
     Archive<ifstream> archiveIn(iFile);
 
-    iFile.seekg(236, iFile.beg); // Endereço bruto de um registro, encontrado com o tellg()
+    iFile.seekg(addresses[code-1], iFile.beg); // Endereço bruto de um registro, encontrado com o tellg()
 
     archiveIn >> temp;
     temp.printRegistry();
