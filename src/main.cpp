@@ -1,13 +1,21 @@
+// Includes da STL
 #include <iostream>
 #include <vector>
 #include <string>
 #include <fstream>
 
-
+// Bibliotecas
 #define HAS_CODECVT
 #include "rapidcsv.h"
-#include "Registry.hpp"
 #include "archive.h"
+
+// Nossos headers
+#include "Registry.hpp"
+// #include "CodeIndex.hpp"
+
+// Nomes dos arquivos
+#define ARQUIVO_BINARIO "RS_Mini.bin"
+#define ARQUIVO_TEXTO "RS_Mini.csv"
 
 using namespace std;
 
@@ -35,9 +43,9 @@ void generateBinaryDataFile() {
      * abrir um arquivo de dados binário.
      */
 
-    rapidcsv::Document doc("RS_Mini.csv", rapidcsv::LabelParams(0, -1));
+    rapidcsv::Document doc(ARQUIVO_TEXTO, rapidcsv::LabelParams(0, -1));
 
-    ofstream oFile("RS_Mini.bin", ios::out | ios::binary);
+    ofstream oFile(ARQUIVO_BINARIO, ios::out | ios::binary);
 
     if(!oFile) {
         cout << "Não foi possível abrir o arquivo" << endl;
@@ -51,6 +59,11 @@ void generateBinaryDataFile() {
         vector<string> row = doc.GetRow<string>(i);
 
         Registry *entry = new Registry(row);
+
+        if (entry->patient_code == 3) {
+            cout << "Posição do código 3 no arquivo: " << oFile.tellp()<<  endl;
+            entry->printRegistry();
+        }
 
         archiveOut << entry;
     }   
@@ -67,7 +80,7 @@ void printBinaryDataFile() {
 
     Registry temp;
 
-    ifstream iFile("RS_Mini.bin", ios::binary);
+    ifstream iFile(ARQUIVO_BINARIO, ios::binary);
 
     if (!iFile) {
         cout << "Não foi possível abrir o arquivo" << endl;
@@ -77,9 +90,9 @@ void printBinaryDataFile() {
     Archive<ifstream> archiveIn(iFile);
 
     for (int i=1; i<50; i++) {
-        cout << "Posição no arquivo:" << iFile.tellg() << endl;
+        // cout << "Posição no arquivo:" << iFile.tellg() << endl;
         archiveIn >> temp;
-        temp.printRegistry();
+        // temp.printRegistry();
     }
 
     iFile.close();
@@ -97,7 +110,7 @@ void getRegistryByCode(int code) {
     
     Registry temp;
 
-    ifstream iFile("RS_Mini.bin", ios::binary);
+    ifstream iFile(ARQUIVO_BINARIO, ios::binary);
 
     if (!iFile) {
         cout << "Não foi possível abrir o arquivo" << endl;
