@@ -1,27 +1,39 @@
-#include "archive.h"
+#pragma once
+
+// Includes da STL
 #include <iostream>
 #include <fstream>
+
+// Bibliotecas
+#include "archive.h"
+
+// Nossos headers
 #include "Reader.hpp"
 #include "Registry.hpp"
 
-#define ARQUIVO_BINARIO "RS_Mini.bin"
+// Nomes dos arquivos - Descomentar aqui qual arquivo vai ser usado
+#define ARQUIVO_TEXTO "RS_Mini.csv"
+// #define ARQUIVO_TEXTO "RS_Pequeno.csv"
+
+#define ARQUIVO_BINARIO "RS.bin"
 
 using namespace std;
 
 class DataFile
 {
 public:
-    void printBinaryDataFile();
-    Registry *getRegistryByAddress(const int address);
-    int size();
-
+    string fileName;
 
     DataFile(void);
     ~DataFile(void);
+    
+    void printBinaryDataFile();
+    Registry getRegistryByAddress(const int address);
+    constexpr int size() const;
+
 
 private:
     ifstream iFile;
-    ofstream oFile;
 
     void generateBinaryDataFile();
 };
@@ -30,15 +42,18 @@ DataFile::DataFile()
 {
     /**
      * @brief Construtor da classe DataFile.
-     * Tenta abrir o arquivo de dados, se conseguir, cria tanto o stream de 
-     * input quanto o de output. Se não conseguir, primeiro gera o arquivo,
-     * depois seta os streams.
+     * Tenta abrir o arquivo de dados, se conseguir, abre um stream de input.
+     * Se não conseguir, primeiro gera o arquivo, depois abre o stream.
      * 
      * @bug Só funciona quando o arquivo de dados não foi gerado ainda,
      * mas não descobri o porquê.
      */
 
+    cout << ARQUIVO_BINARIO << endl;
+
     iFile.open(ARQUIVO_BINARIO, ios::in | ios::binary);
+
+    cout << iFile.bad() << endl;
 
     if (!iFile) 
     {
@@ -46,15 +61,15 @@ DataFile::DataFile()
         iFile.open(ARQUIVO_BINARIO, ios::in  | ios::binary);
     }
 
+    printBinaryDataFile();
 }
 
 DataFile::~DataFile()
 {
     iFile.close();
-    oFile.close();
 }
 
-int DataFile::size() 
+constexpr int DataFile::size() const 
 {
     return (ARQUIVO_BINARIO == "RS_Mini.bin") ? 50 : 100000;
 }
@@ -69,51 +84,54 @@ void DataFile::generateBinaryDataFile() {
      * abrir um arquivo de dados binário.
      */
 
-    oFile.open(ARQUIVO_BINARIO, ios::out | ios::binary);
+    ofstream oFile(ARQUIVO_BINARIO, ios::out | ios::binary);
 
     if(!oFile) {
         cout << "Não foi possível criar o arquivo de dados." << endl;
         exit(0);
     }
 
-    Reader *reader = new Reader();
+    cout << "Gerando o arquivo de dados..." << endl;
 
+    Reader *reader = new Reader(ARQUIVO_TEXTO);
+    
     Archive<ofstream> archiveOut(oFile);
 
-    for(int patient = 0; patient < size(); patient++) {
-
-        vector<string> row = reader->getRow(patient);
-
+    for(int index = 0; index < size(); index++) 
+    {
+        vector<string> row = reader->getRow(index);
         Registry *entry = new Registry(row);
-
         archiveOut << entry;
     }   
 
-    oFile.seekp(0, oFile.beg);
+    oFile.close();
 }
 
 void DataFile::printBinaryDataFile() {
 
     /**
-     * @brief A princípio só mostra todos os registros
-     * do arquivo pra ver se tá tudo funcionando.
+     * @brief Mostra o primeiro e o último Registros gravados no arquivo
      */
 
     Registry temp;
 
     Archive<ifstream> archiveIn(this->iFile);
 
-    for (int line = 1; line <= size(); line++) 
+    for (int code = 1; code <= size(); code++) 
     {
-        cout << "Posição no arquivo:" << this->iFile.tellg() << endl;
         archiveIn >> temp;
-        temp.printRegistryInfo();
+        
+        if (code == 1 || code == size()) 
+        {
+            temp.printRegistryInfo();
+        }
+        
     }
 
     this->iFile.seekg(0, this->iFile.beg);
 }
 
-Registry *DataFile::getRegistryByAddress(const int address)
+Registry DataFile::getRegistryByAddress(const int address)
 {
     /**
      * @brief Método chamado por qualquer função de pesquisa para
@@ -124,7 +142,7 @@ Registry *DataFile::getRegistryByAddress(const int address)
      * @return O objeto Registro pesquisado.
      */
 
-    Registry *result;
+    Registry result;
     Archive<ifstream> archiveIn(iFile);
 
     iFile.seekg(address, iFile.beg);

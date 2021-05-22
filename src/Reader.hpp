@@ -5,8 +5,6 @@
 #define HAS_CODECVT
 #include "rapidcsv.h"
 
-#define ARQUIVO_TEXTO "RS_Mini.csv"
-
 using namespace std;
 
 class Reader
@@ -20,25 +18,26 @@ public:
     rapidcsv::Document *doc;
     vector<string> getRow(int index);
 
-    Reader(void);
     Reader(string fileName);
 };
 
-Reader::Reader() 
-{
-    this->fileName = ARQUIVO_TEXTO;
+// Reader::Reader() 
+// {
+//     this->fileName = ARQUIVO_TEXTO;
 
-    // Parâmetros 0 e -1 indicam que o a linha 0 contém o label de cada coluna e que 
-    // nenhuma coluna é o label de cada linha 
-    // (embora a coluna 0 seja, mas aí não tem como acessar o valor dela)
-    this->doc = new rapidcsv::Document(this->fileName, rapidcsv::LabelParams(0, -1));
-}
+//     this->doc = new rapidcsv::Document(this->fileName, rapidcsv::LabelParams(0, -1));
+// }
 
 Reader::Reader(string fileName)
 {
     this->fileName = fileName;
 
-    this->doc = new rapidcsv::Document(this->fileName, rapidcsv::LabelParams(0, -1));
+    // Parâmetros 0 e -1 indicam que o a linha 0 contém o label de cada coluna e que 
+    // nenhuma coluna é o label de cada linha 
+    // (embora a coluna 0 seja, mas aí não tem como acessar o valor dela)
+    // doc = new rapidcsv::Document(this->fileName, rapidcsv::LabelParams(0, -1));
+    rapidcsv::Document doc(fileName, rapidcsv::LabelParams(0, -1));
+    cout << "Criado reader csv..." << endl;
 }
 
 vector<string> Reader::getRow(int index)

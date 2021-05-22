@@ -61,9 +61,9 @@ void HashMap::printAllValuesFromKey(std::string dateKey)
         if(it -> first == dateKey)
         {
             int address = it -> second;
-            Registry::Registry *registry = dataFile->getRegistryByAddress(address);
+            Registry::Registry registry = dataFile->getRegistryByAddress(address);
 
-            registry->printRegistryInfo();
+            registry.printRegistryInfo();
         }
     }
 }
