@@ -1,3 +1,5 @@
+#pragma once
+
 #include <string>
 #include <iostream>
 #include <vector>
@@ -22,9 +24,10 @@ class Registry
         
         std::string vaccine_maker;
         std::string vaccine_dose;
+        int vaccine_code;
         std::string vaccine_name;        
 
-        Registry();
+        Registry(void);
 
         Registry(int patient_code,
                 int patient_age,
@@ -36,6 +39,7 @@ class Registry
                 std::string vaccine_maker,
                 std::string application_date,
                 std::string vaccine_dose,
+                int vaccine_code,
                 std::string vaccine_name);
 
         Registry(std::vector<std::string>);
@@ -44,12 +48,10 @@ class Registry
 
         template <class T> void Serialize(T &archive);
 
-
-
         ~Registry();
 };
 
-Registry::Registry(){
+Registry::Registry(void){
     /**
      * @brief Construtor vazio, por enquanto não foi necessário
      */
@@ -60,7 +62,7 @@ Registry::Registry(int patient_code, int patient_age,
                 std::string application_city, int category_code,
                 std::string category_name, std::string vaccine_maker,
                 std::string application_date, std::string vaccine_dose,
-                std::string vaccine_name) 
+                int vaccine_code, std::string vaccine_name) 
 {
     /**
      * @brief Construtor de um Registro a partir dos valores
@@ -77,6 +79,7 @@ Registry::Registry(int patient_code, int patient_age,
     this->vaccine_maker     = vaccine_maker;
     this->application_date  = application_date;
     this->vaccine_dose      = vaccine_dose;
+    this->vaccine_code      = vaccine_code;
     this->vaccine_name      = vaccine_name;
 }
 
@@ -95,9 +98,10 @@ Registry::Registry(std::vector<std::string> row)
     category_code           = stoi(row[5]);
     category_name           = row[6];
     vaccine_maker           = row[7];
-    application_date        = row[8]; // TODO(Converter de data pra um string)
+    application_date        = row[8].substr(0, 10);
     vaccine_dose            = row[9];
-    vaccine_name            = row[10];
+    vaccine_code            = stoi(row[10]); 
+    vaccine_name            = row[11];
 }
 
 void Registry::printRegistry()
@@ -125,7 +129,7 @@ template <class T> void  Registry::Serialize(T &archive)
     archive & patient_code & patient_age & patient_birthday &
         patient_sex & application_city & category_code & 
         category_name & vaccine_maker & application_date &
-        vaccine_dose & vaccine_name;
+        vaccine_dose & vaccine_code & vaccine_name;
 }
 
 Registry::~Registry()

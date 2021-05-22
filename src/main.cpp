@@ -11,118 +11,104 @@
 
 // Nossos headers
 #include "Registry.hpp"
-// #include "CodeIndex.hpp"
+#include "Reader.hpp"
+#include "DataFileHandler.hpp"
 
 // Nomes dos arquivos
 #define ARQUIVO_BINARIO "RS_Mini.bin"
 #define ARQUIVO_TEXTO "RS_Mini.csv"
+#define ARQUIVO_INDICES "Indices_Codigo_RS.bin"
 
 using namespace std;
 
-void generateBinaryDataFile();
+void generateCodeIndexFile();
 
-void printBinaryDataFile();
-
-void getRegistryByCode(int code);
+void printCodeIndexFile();
 
 int main() {
 
-    generateBinaryDataFile();
-    printBinaryDataFile();
-    getRegistryByCode(3);
-
+    DataFile *dataFile = new DataFile();
+    // dataFile->printBinaryDataFile();
+    // generateCodeIndexFile();
+    // printCodeIndexFile();
 }
 
-void generateBinaryDataFile() {
+//TODO (Mover tudo isso pra um arquivo específico)
+// void generateCodeIndexFile() 
+// {
+//     /**
+//      * @brief Função que vai gerar o arquivo de índices
+//      * especificamente para a coluna paciente_codigo.
+//      * 
+//      * @details O patient_code 1 tá no endereço 8 desse
+//      * arquivo. Logo, ao dar o seek, a primeira posição
+//      * tá em (1 * sizeof(int) * 2).
+//      */
 
-    /**
-     * @brief Função para gerar o arquivo de dados binário
-     * a partir de um arquivo .csv .
-     * 
-     * Essa função é chamada somente quando não foi possível
-     * abrir um arquivo de dados binário.
-     */
+//     Registry temp;
+//     int elements = 0;
+//     int code, position;
 
-    rapidcsv::Document doc(ARQUIVO_TEXTO, rapidcsv::LabelParams(0, -1));
+//     ifstream iFile(ARQUIVO_BINARIO, ios::binary);
 
-    ofstream oFile(ARQUIVO_BINARIO, ios::out | ios::binary);
+//     if (!iFile) {
+//         cout << "Não foi possível abrir o arquivo de dados." << endl;
+//         exit(0);
+//     }
+//     Archive<ifstream> archiveIn(iFile);
 
-    if(!oFile) {
-        cout << "Não foi possível abrir o arquivo" << endl;
-        exit(0);
-    }
+//     ofstream oFile(ARQUIVO_INDICES, ios::binary);
 
-    Archive<ofstream> archiveOut(oFile);
+//     if (!oFile) {
+//         cout << "Não foi possível abrir o arquivo de índices." << endl;
+//         exit(0);
+//     }
+//     Archive<ofstream> archiveOut(oFile);
 
-    for(int i = 0; i < 50; i++) {
-        // Algo tá dando errado aqui, não tá lendo a última linha
-        vector<string> row = doc.GetRow<string>(i);
+//     for (int i=1; i<=dataFile.size(); i++) {
+//         /**
+//          * Varredura do arquivo de dados, agregando
+//          * um patient_code a uma posição específica
+//          * no arquivo binário. Essa associação é 
+//          * gravada no arquivo de índices.
+//          */
 
-        Registry *entry = new Registry(row);
+//         code = temp.patient_code;
+//         position = iFile.tellg();
+//         archiveOut << make_pair(code, position);
+//         archiveIn >> temp;
+//         elements++;
+//     }
 
-        if (entry->patient_code == 3) {
-            cout << "Posição do código 3 no arquivo: " << oFile.tellp()<<  endl;
-            entry->printRegistry();
-        }
+//     // cout << "Foram armazenados " << elements << " índices de códigos." << endl;
 
-        archiveOut << entry;
-    }   
+//     iFile.close();
+//     oFile.close();
+// }
 
-    oFile.close();
-}
+// void printCodeIndexFile() {
 
-void printBinaryDataFile() {
+//     /**
+//      * @brief Printa todo o arquivo de índices
+//      * pra ver se tá tudo funcionando.
+//      */
 
-    /**
-     * @brief A princípio só mostra todos os registros
-     * do arquivo pra ver se tá tudo funcionando.
-     */
+//     ifstream iFile(ARQUIVO_INDICES, ios::binary);
 
-    Registry temp;
+//     if (!iFile) {
+//         cout << "Não foi possível abrir o arquivo de dados." << endl;
+//         exit(0);
+//     }
+//     Archive<ifstream> archiveIn(iFile);
 
-    ifstream iFile(ARQUIVO_BINARIO, ios::binary);
+//     pair<int, int> index;
 
-    if (!iFile) {
-        cout << "Não foi possível abrir o arquivo" << endl;
-        exit(0);
-    }
+//     for (int i=0; i<dataFile.size(); i++) {
 
-    Archive<ifstream> archiveIn(iFile);
+//         cout << "Índice:" << iFile.tellg();
+//         archiveIn >> index;
+//         cout << " Código: " << index.first << " Posição: " << index.second << endl;
+//     }
 
-    for (int i=1; i<50; i++) {
-        // cout << "Posição no arquivo:" << iFile.tellg() << endl;
-        archiveIn >> temp;
-        // temp.printRegistry();
-    }
-
-    iFile.close();
-}
-
-void getRegistryByCode(int code) {
-    /**
-     * @brief Mock-up de como vai ser a função pra pegar um
-     * registro dado um código
-     */
-
-    array<int, 3> addresses;
-    // A posição no vetor é o código + 1, o valor, o endereço
-    addresses[2] = 292;
-    
-    Registry temp;
-
-    ifstream iFile(ARQUIVO_BINARIO, ios::binary);
-
-    if (!iFile) {
-        cout << "Não foi possível abrir o arquivo" << endl;
-        exit(0);
-    }
-
-    Archive<ifstream> archiveIn(iFile);
-
-    iFile.seekg(addresses[code-1], iFile.beg); // Endereço bruto de um registro, encontrado com o tellg()
-
-    archiveIn >> temp;
-    temp.printRegistry();
-
-    iFile.close();
-}
+//     iFile.close();
+// }
