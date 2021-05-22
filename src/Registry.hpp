@@ -44,7 +44,7 @@ class Registry
 
         Registry(std::vector<std::string>);
 
-        void printRegistry();
+        void printRegistryInfo();
 
         template <class T> void Serialize(T &archive);
 
@@ -104,7 +104,7 @@ Registry::Registry(std::vector<std::string> row)
     vaccine_name            = row[11];
 }
 
-void Registry::printRegistry()
+void Registry::printRegistryInfo()
 {
     std::cout << "Codigo: " << patient_code << std::endl;
     std::cout << "Idade: " << patient_age << std::endl;

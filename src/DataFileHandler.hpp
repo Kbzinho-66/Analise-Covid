@@ -12,7 +12,7 @@ class DataFile
 {
 public:
     void printBinaryDataFile();
-    Registry getRegistryByAddress(const int address);
+    Registry *getRegistryByAddress(const int address);
     int size();
 
 
@@ -107,13 +107,13 @@ void DataFile::printBinaryDataFile() {
     {
         cout << "Posição no arquivo:" << this->iFile.tellg() << endl;
         archiveIn >> temp;
-        temp.printRegistry();
+        temp.printRegistryInfo();
     }
 
     this->iFile.seekg(0, this->iFile.beg);
 }
 
-Registry DataFile::getRegistryByAddress(const int address)
+Registry *DataFile::getRegistryByAddress(const int address)
 {
     /**
      * @brief Método chamado por qualquer função de pesquisa para
@@ -124,7 +124,7 @@ Registry DataFile::getRegistryByAddress(const int address)
      * @return O objeto Registro pesquisado.
      */
 
-    Registry result;
+    Registry *result;
     Archive<ifstream> archiveIn(iFile);
 
     iFile.seekg(address, iFile.beg);
