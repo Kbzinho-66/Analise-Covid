@@ -49,11 +49,7 @@ DataFile::DataFile()
      * mas não descobri o porquê.
      */
 
-    cout << ARQUIVO_BINARIO << endl;
-
     iFile.open(ARQUIVO_BINARIO, ios::in | ios::binary);
-
-    cout << iFile.bad() << endl;
 
     if (!iFile) 
     {
@@ -94,7 +90,6 @@ void DataFile::generateBinaryDataFile() {
     cout << "Gerando o arquivo de dados..." << endl;
 
     Reader *reader = new Reader(ARQUIVO_TEXTO);
-    
     Archive<ofstream> archiveOut(oFile);
 
     for(int index = 0; index < size(); index++) 
