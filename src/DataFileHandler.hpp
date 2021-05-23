@@ -12,6 +12,7 @@
 #include "Registry.hpp"
 
 // Nomes dos arquivos - Descomentar aqui qual arquivo vai ser usado
+// e não esquecer de deletar os arquivos já gerados.
 #define ARQUIVO_TEXTO "RS_Mini.csv"
 // #define ARQUIVO_TEXTO "RS_Pequeno.csv"
 
@@ -23,17 +24,18 @@ class DataFile
 {
 public:
     string fileName;
+    ifstream iFile;
+    Archive<ifstream> *archiveIn;
 
     DataFile(void);
     ~DataFile(void);
     
     void printBinaryDataFile();
     Registry getRegistryByAddress(const int address);
-    constexpr int size() const;
+    constexpr int size();
 
 
 private:
-    ifstream iFile;
 
     void generateBinaryDataFile();
 };
@@ -44,11 +46,9 @@ DataFile::DataFile()
      * @brief Construtor da classe DataFile.
      * Tenta abrir o arquivo de dados, se conseguir, abre um stream de input.
      * Se não conseguir, primeiro gera o arquivo, depois abre o stream.
-     * 
-     * @bug Só funciona quando o arquivo de dados não foi gerado ainda,
-     * mas não descobri o porquê.
      */
 
+    fileName = ARQUIVO_TEXTO;
     iFile.open(ARQUIVO_BINARIO, ios::in | ios::binary);
 
     if (!iFile) 
@@ -57,7 +57,8 @@ DataFile::DataFile()
         iFile.open(ARQUIVO_BINARIO, ios::in  | ios::binary);
     }
 
-    printBinaryDataFile();
+    archiveIn = new Archive(iFile);
+    // printBinaryDataFile();
 }
 
 DataFile::~DataFile()
@@ -65,9 +66,13 @@ DataFile::~DataFile()
     iFile.close();
 }
 
-constexpr int DataFile::size() const 
+constexpr int DataFile::size() 
 {
-    return (ARQUIVO_BINARIO == "RS_Mini.bin") ? 50 : 100000;
+    /**
+     * @brief Retorna a quantidade de entradas no arquivo de acordo com
+     * o nome do arquivo texto usado.
+     */
+    return (ARQUIVO_TEXTO == "RS_Mini.csv") ? 50 : 100000;
 }
 
 void DataFile::generateBinaryDataFile() {
@@ -105,16 +110,15 @@ void DataFile::generateBinaryDataFile() {
 void DataFile::printBinaryDataFile() {
 
     /**
-     * @brief Mostra o primeiro e o último Registros gravados no arquivo
+     * @brief Mostra o primeiro e o último Registros gravados no arquivo.
+     * Método usado somente para fins de teste.
      */
 
     Registry temp;
 
-    Archive<ifstream> archiveIn(this->iFile);
-
     for (int code = 1; code <= size(); code++) 
     {
-        archiveIn >> temp;
+        *archiveIn >> temp;
         
         if (code == 1 || code == size()) 
         {
@@ -123,10 +127,10 @@ void DataFile::printBinaryDataFile() {
         
     }
 
-    this->iFile.seekg(0, this->iFile.beg);
+    iFile.seekg(0, iFile.beg);
 }
 
-Registry DataFile::getRegistryByAddress(const int address)
+Registry DataFile::getRegistryByAddress(const int address) 
 {
     /**
      * @brief Método chamado por qualquer função de pesquisa para
@@ -138,10 +142,9 @@ Registry DataFile::getRegistryByAddress(const int address)
      */
 
     Registry result;
-    Archive<ifstream> archiveIn(iFile);
 
     iFile.seekg(address, iFile.beg);
-    archiveIn >> result;
+    *archiveIn >> result;
     iFile.seekg(0, iFile.beg);
 
     return result;

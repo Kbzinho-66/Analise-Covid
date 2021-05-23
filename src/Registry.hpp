@@ -106,9 +106,10 @@ Registry::Registry(std::vector<std::string> row)
 
 void Registry::printRegistry()
 {
-    std::cout << "Codigo: " << patient_code << std::endl;
+    std::cout << "---------------------------------------------------------" << std::endl;
+    std::cout << "Código: " << patient_code << std::endl;
     std::cout << "Idade: " << patient_age << std::endl;
-    std::cout << "Dt. Nascimento: " << patient_birthday << std::endl;
+    std::cout << "Data de Nascimento: " << patient_birthday << std::endl;
     std::cout << "Categoria: " << category_name << std::endl;
     std::cout << std::endl;
     std::cout << "Cidade de Aplicação da Vacina: " << application_city << std::endl;
