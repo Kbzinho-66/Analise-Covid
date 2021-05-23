@@ -122,7 +122,7 @@ void DataFile::printBinaryDataFile() {
         
         if (code == 1 || code == size()) 
         {
-            temp.printRegistry();
+            temp.printRegistryInfo();
         }
         
     }

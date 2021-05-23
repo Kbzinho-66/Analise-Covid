@@ -30,6 +30,7 @@ CodeIndex *codeIndex = new CodeIndex(*dataFile);
 
 int main() {
 
+<<<<<<< HEAD
     int answer;
 
     cout << "-----------------------------------------------------------------" << endl;
@@ -77,6 +78,9 @@ void menu()
     cout << "3) Procurar todos os registros de uma data." << endl;
     cout << "4) Procurar todos os pacientes vacinados com uma vacina." << endl;
     cout << "0) Sair." << endl;
+=======
+    DataFile *dataFile = new DataFile();
+>>>>>>> 91ee7266bf5313bb62867ce4d732e789ff07f170
 }
 
 void searchByCode()
