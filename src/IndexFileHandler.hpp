@@ -157,7 +157,7 @@ void CodeIndex::searchRegistryByCode(int patient_code)
     // int address = binarySearch(archiveInIndex, patient_code, 0, dataFile.size());
     int address = binarySearch(archiveInIndex, patient_code, 0, size());
 
-    if (address != -1) dataFile.getRegistryByAddress(address).printRegistry();
+    if (address != -1) dataFile.getRegistryByAddress(address).printRegistryInfo();
     else cout << "Código não encontrado." << endl << endl;
 }
 
