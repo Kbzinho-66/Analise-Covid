@@ -4,6 +4,5 @@ env
 .R
 src/main
 src/RS_Mini.bin
-.vscode
 .json
 .bin
