@@ -16,9 +16,10 @@ class Reader
 public:
     string fileName;
     rapidcsv::Document *doc;
-    vector<string> getRow(int index);
 
     Reader(string fileName);
+    
+    vector<string> getRow(int index);
 };
 
 Reader::Reader(string fileName)
