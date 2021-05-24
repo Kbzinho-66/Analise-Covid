@@ -18,6 +18,9 @@
 #define ARQUIVO_INDICES "Indices_Codigo_RS.bin"
 
 #define TAMANHO_INDEX (sizeof(int) * 2)
+
+std::string indexFile;
+
 class CodeIndex
 {
     /**
@@ -25,9 +28,9 @@ class CodeIndex
      * para a coluna paciente_codigo.
      */
     public:
-        std::string fileName;
+        std::string indexFileName;
 
-        CodeIndex(DataFile &dataFile_);
+        CodeIndex(DataFile &dataFile_, std::string indexFileName);
         ~CodeIndex(void);
 
         int size(void);
@@ -42,7 +45,7 @@ class CodeIndex
         int binarySearch(Archive<ifstream> archiveIn, int code, int begin, int end);
 };
 
-CodeIndex::CodeIndex(DataFile &dataFile_): dataFile(dataFile_)
+CodeIndex::CodeIndex(DataFile &dataFile_, std::string indexFileStr = ARQUIVO_INDICES): dataFile(dataFile_)
 {
     /**
      * @brief Construtor para a classe CodeIndex.
@@ -52,14 +55,16 @@ CodeIndex::CodeIndex(DataFile &dataFile_): dataFile(dataFile_)
      * @param dataFile O arquivo de dados atualmente aberto.
      */
     
+    this->indexFileName = indexFileStr;
+
     // Tenta abrir o arquivo de índices pra leitura
-    iIndexFile.open(ARQUIVO_INDICES, ios::in | ios::binary);
+    iIndexFile.open(this->indexFileName, ios::in | ios::binary);
 
     if (!iIndexFile)
     {
         // Se não conseguiu, gerar o arquivo e abrir pra leitura
         generateCodeIndexFile();
-        iIndexFile.open(ARQUIVO_INDICES, ios::in | ios::binary);
+        iIndexFile.open(this->indexFileName, ios::in | ios::binary);
     }
     
     // printCodeIndexFile();
@@ -91,7 +96,7 @@ void CodeIndex::generateCodeIndexFile()
      */
 
     // Abrir o arquivo de índices para escrita
-    ofstream oIndexFile(ARQUIVO_INDICES, ios::out | ios::binary);
+    ofstream oIndexFile(this->indexFileName, ios::out | ios::binary);
 
     if (!oIndexFile) {
         cout << "Não foi possível criar o arquivo de índices." << endl;

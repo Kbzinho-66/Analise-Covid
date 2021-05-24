@@ -8,8 +8,10 @@
 #include "archive.h"
 #include <iostream>
 #include <fstream>
+#include <vector>
 
 #include "DataFileHandler.hpp"
+#include "IndexFileHandler.hpp"
 #include "Registry.hpp"
 
 class Node
@@ -19,7 +21,8 @@ class Node
      *  da árvore binária
      */
 public:
-    int address;
+    std::string city;
+    vector<int> indexes;
     Node *right;
     Node *left;
 };
@@ -34,16 +37,18 @@ public:
     BinarySearchTree();
     ~BinarySearchTree();
 
-    void insertAddress(int address);
-    void deleteAddress(int address);
-    Node *search(int address);
+    void insertIndex(std::string city, int index);
+    void deleteCity(std::string city);
+    Node *searchCity(std::string city);
+    bool hasRegistryIndex(int index);
     Node *tree_minimun(Node *leaf);
-    void getRegistry(int address);
+    void getRegistry(int index);
 
 private:
-    void insertAddress(int address, Node *leaf);
-    void deleteAddress(int address, Node *leaf);
-    Node *search(int address, Node *leaf);
+    void insertIndex(std::string city, int index, Node *leaf);
+    void deleteCity(std::string city, Node *leaf);
+    Node *searchCity(std::string city, Node *leaf);
+    bool searchRegistry(int index, Node *leaf);
 
     Node *root;
 };
@@ -56,74 +61,117 @@ BinarySearchTree::~BinarySearchTree()
 {
 }
 
-void BinarySearchTree::insertAddress(int address)
+void BinarySearchTree::insertIndex(std::string city, int index)
 {
+    /**
+     * @brief Funcão de inserção do índice na árvore. Se cidade já
+     * existir na árvore, adiciona o índice no array de indices do nodo.
+     * 
+     * @param city String da cidade do registro do índice
+     * @param index Índice do registro a ser inserido
+     * 
+     */
     if (root != NULL)
     {
-        insert(address, root);
+        insert(city, index, root);
     }
     else
     {
         root = new Node;
-        root->address = address;
+        root->city = city;
+        root->indexes.assign(index, 1);
         root->left = NULL;
         root->right = NULL;
     }
 }
 
-void insert(int address, Node *leaf)
+void insert(std::string city, int index, Node *leaf)
 {
-    if(address < leaf->address)
+    /**
+     * @brief Função recursiva que irá realizar a inserção 
+     * de um novo nodo na árvore ou pela inserção do índice na
+     * lista do nodo caso cidade já esteja presente
+     * 
+     * @param city A cidade do registro que se deseja inserir
+     * @param index O índice do registro para ser inserido
+     * @param lead Nodo atual
+     */
+    if (city.compare(leaf->city) < 0)
     {
         if (leaf->left != NULL)
         {
-            insert(address, leaf->left);
+            insert(city, index, leaf->left);
         }
         else
         {
             leaf->left = new Node;
-            leaf->left->address = address;
+            leaf->left->city = city;
+            leaf->indexes.assign(index, 1);
             leaf->left->left = NULL;
             leaf->left->right = NULL;
         }
     }
-    else if (address >= leaf->address)
+    else if (city.compare(leaf->city) > 0)
     {
         if (leaf->right != NULL)
         {
-            insert(address, leaf->right);
+            insert(city, index, leaf->right);
         }
         else
         {
             leaf->right = new Node;
-            leaf->right->address = address;
+            leaf->right->city = city;
+            leaf->indexes.assign(index, 1);
             leaf->right->right = NULL;
             leaf->right->left = NULL;
         }
     }
-}
-
-Node *BinarySearchTree::search(int address)
-{
-    return search(address, root);
-}
-
-Node *BinarySearchTree::search(int address, Node *leaf)
-{
-    if(leaf == NULL)
+    else if (city.compare(leaf->city) == 0)
     {
-        if(address == leaf->address)
+        // se cidade já existe na árvore só adiciona o índice
+        leaf->indexes.push_back(index);
+    }
+}
+
+Node *BinarySearchTree::searchCity(std::string city)
+{
+    /**
+     * @brief Função responsavel pela busca do nodo com valor
+     * de dada idade
+     *
+     * @param city String da cidade que se deseja buscar na árvore
+     * 
+     * @return O nodo da cidade encontrada ou nulo caso não encontrado
+     */
+    return searchCity(city, root);
+}
+
+Node *BinarySearchTree::searchCity(std::string city, Node *leaf)
+{
+    /**
+     * @brief Função que realiza busca em profundidade para 
+     * buscar nodo com valor de dada cidade
+     *
+     * @param city String da cidade que se deseja buscar na árvore
+     * @param leaf nodo atual
+     * 
+     * @return O nodo da cidade encontrada ou nulo caso nodo
+     * não exista
+     */
+    if (leaf == NULL)
+    {
+        if (city == leaf->city)
         {
             return leaf;
         }
 
-        if(address < leaf->address)
+        if (city < leaf->city)
         {
-            return search(address, leaf->left);
+            return searchCity(city, leaf->left);
         }
         else
         {
-            return search(address, leaf->right);
+            return searchCity(city, leaf->right);
         }
     }
     else
@@ -132,14 +180,61 @@ Node *BinarySearchTree::search(int address, Node *leaf)
     }
 }
 
-void BinarySearchTree::getRegistry(int address)
+bool BinarySearchTree::hasRegistryIndex(int index)
+{
+    /**
+     * @brief Função responsavel por dizer se dado índice existe na árvore
+     *
+     * @param index índice que se deseja verificar se está na lista
+     * 
+     * @return true se existe, falso se não
+     */
+    return searchRegistry(index, root);
+}
+
+bool BinarySearchTree::searchRegistry(int index, Node *leaf)
+{
+    /**
+     * @brief Função responsável por busca em profundidade na árvore
+     * em busca do índice do registro
+     * 
+     * @param index índice que se deseja verificar se está na lista
+     * @param leaf nodo atual
+     * 
+     * @return true se existe, falso se não
+     */
+    if (leaf != NULL)
+    {
+        // se achou o valor em um dos nodos, retorna verdadeiro
+        if (std::find(leaf->indexes.begin(), leaf->indexes.end(), index) != leaf->indexes.end())
+        {
+            return true;
+        }
+
+        // se não, dispara busca nos dois nodos da árvore
+        return (searchRegistry(index, leaf->left) || searchRegistry(index, leaf->right));
+    }
+    else
+    {
+        // quando atingir o fundo e nodo for nulo, retorna falso pq não achou
+        return false;
+    }
+}
+
+void BinarySearchTree::getRegistry(int index)
 {
     Registry::Registry registry;
-    DataFile::DataFile *dataFile = new DataFile::DataFile();
 
-    int address = search(address)->address;
+    if (hasRegistryIndex(index))
+    {
+        //abre arquivo da cidade
+        DataFile *dataFile = new DataFile();
+        CodeIndex *codeIndex = new CodeIndex(*dataFile);
+        //procura o indice
+        codeIndex->searchRegistryByCode(index);
 
-    registry = dataFile->getRegistryByAddress(address);
+        return;
+    }
 
-    registry.printRegistryInfo();
+    else cout << "Código não encontrado." << endl << endl;
 }
