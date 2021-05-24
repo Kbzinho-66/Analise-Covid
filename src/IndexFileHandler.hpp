@@ -1,9 +1,18 @@
+    /**
+ * @file IndexFileHandler.hpp
+ * 
+ * @brief Arquivo onde estão as classes e os métodos que lidarão com qualquer
+ * operação envolvendo arquivos de índice.
+ * 
+ */
+
 #pragma once
 
 // Includes da STL
 #include <fstream>
 #include <iostream>
 #include <string>
+#include <tuple>
 #include <vector>
 
 // Bibliotecas
@@ -15,7 +24,15 @@
 #include "Registry.hpp"
 
 // Nomes dos arquivos
-#define ARQUIVO_INDICES "Indices_Codigo_RS.bin"
+#define ARQUIVO_INDICES_CODIGO "Indices_Codigo_RS.bin"
+#define ARQUIVO_INDICES_VACINA "Indices_Vacina_RS.txt"
+
+// Flag pra forçar a geração de todos os arquivos
+#define FLAG_TESTE true
+
+/////////////////////////////////////////////////////////////////////
+/////          ÍNDICES ORDENADOS PELO PACIENTE_CODIGO           /////
+/////////////////////////////////////////////////////////////////////
 
 #define TAMANHO_INDEX (sizeof(int) * 2)
 
@@ -30,7 +47,7 @@ class CodeIndex
     public:
         std::string indexFileName;
 
-        CodeIndex(DataFile &dataFile_, std::string indexFileName);
+        CodeIndex(DataFile &dataFile_);
         ~CodeIndex(void);
 
         int size(void);
@@ -45,7 +62,7 @@ class CodeIndex
         int binarySearch(Archive<ifstream> archiveIn, int code, int begin, int end);
 };
 
-CodeIndex::CodeIndex(DataFile &dataFile_, std::string indexFileStr = ARQUIVO_INDICES): dataFile(dataFile_)
+CodeIndex::CodeIndex(DataFile &dataFile_) : dataFile(dataFile_)
 {
     /**
      * @brief Construtor para a classe CodeIndex.
@@ -55,17 +72,25 @@ CodeIndex::CodeIndex(DataFile &dataFile_, std::string indexFileStr = ARQUIVO_IND
      * @param dataFile O arquivo de dados atualmente aberto.
      */
     
-    this->indexFileName = indexFileStr;
-
-    // Tenta abrir o arquivo de índices pra leitura
-    iIndexFile.open(this->indexFileName, ios::in | ios::binary);
-
-    if (!iIndexFile)
+    if (FLAG_TESTE)
     {
-        // Se não conseguiu, gerar o arquivo e abrir pra leitura
         generateCodeIndexFile();
-        iIndexFile.open(this->indexFileName, ios::in | ios::binary);
+        iIndexFile.open(ARQUIVO_INDICES_CODIGO, ios::in | ios::binary);
     }
+    else
+    {
+        // Tenta abrir o arquivo de índices pra leitura
+        iIndexFile.open(ARQUIVO_INDICES_CODIGO, ios::in | ios::binary);
+
+        if (!iIndexFile)
+        {
+            // Se não conseguiu, gerar o arquivo e abrir pra leitura
+            generateCodeIndexFile();
+            iIndexFile.open(ARQUIVO_INDICES_CODIGO, ios::in | ios::binary);
+        }
+    }
+
+    
     
     // printCodeIndexFile();
 }
@@ -96,7 +121,7 @@ void CodeIndex::generateCodeIndexFile()
      */
 
     // Abrir o arquivo de índices para escrita
-    ofstream oIndexFile(this->indexFileName, ios::out | ios::binary);
+    ofstream oIndexFile(ARQUIVO_INDICES_CODIGO, ios::out | ios::binary);
 
     if (!oIndexFile) {
         cout << "Não foi possível criar o arquivo de índices." << endl;
@@ -123,7 +148,7 @@ void CodeIndex::generateCodeIndexFile()
         archiveOut << make_pair(code, position);
     }
 
-    dataFile.iFile.seekg(0, dataFile.iFile.beg);
+    dataFile.resetInputStream();
     oIndexFile.close();
 }
 
@@ -196,3 +221,251 @@ int CodeIndex::binarySearch(Archive<ifstream> archiveInIndex, int code, int begi
     return -1;
 }
 
+/////////////////////////////////////////////////////////////////////
+/////          ÍNDICES ORDENADOS PELO NOME DA VACINA            /////
+/////////////////////////////////////////////////////////////////////
+
+class VaccineIndex
+{
+    /**
+     * @brief Classe para representar o arquivo de índices específico
+     * para a coluna vacina_nome.
+     */
+    public:
+        std::string fileName;
+        int firstLayerSize;
+
+        VaccineIndex(DataFile &dataFile_);
+        ~VaccineIndex(void);
+
+        void searchRegistryByVaccine_Name(string vaccine_name);
+
+    private:
+        std::ifstream iIndexFile;
+        DataFile &dataFile;
+
+        void printVaccineIndexFile(void);
+        void generateVaccineIndexFile(void);
+        vector<tuple<string, int, int>> generateFirstLayer(void);
+        void generateSecondLayer(vector<tuple<string, int, int>> vaccines);
+        void printVaccineFile(string fileName, int vaccine_count);
+        int binarySearch(Archive<ifstream> archiveIn, string vaccine_name, int begin, int end);
+        bool codeNotInVector(int code, vector<tuple<string, int, int>> &vaccines);
+};
+
+VaccineIndex::VaccineIndex(DataFile &dataFile_): dataFile(dataFile_)
+{
+    /**
+     * @brief Construtor para a classe VaccineIndex.
+     * Tenta abrir um arquivo de índices. Se conseguir, abre um stream de input.
+     * Se não conseguir, gera um arquivo de índices e então abre o stream.
+     * 
+     * @param dataFile O arquivo de dados atualmente aberto.
+     */
+
+    fileName = ARQUIVO_INDICES_VACINA;
+    firstLayerSize = 0;
+
+    if (FLAG_TESTE)
+    {
+        generateVaccineIndexFile();
+        iIndexFile.open(ARQUIVO_INDICES_VACINA, ios::in);
+    }
+    else
+    {
+        // Tenta abrir o arquivo de índices pra leitura
+        iIndexFile.open(ARQUIVO_INDICES_VACINA, ios::in);
+
+        if (!iIndexFile)
+        {
+            // Se não conseguiu, gerar o arquivo e abrir pra leitura
+            generateVaccineIndexFile();
+            // iIndexFile.open(ARQUIVO_INDICES_VACINA, ios::in);
+        }
+    }
+    
+    // printCodeIndexFile();
+}
+
+VaccineIndex::~VaccineIndex()
+{
+    iIndexFile.close();
+}
+
+void VaccineIndex::generateVaccineIndexFile() 
+{
+    /**
+     * @details Função que vai gerar duas camadas de arquivos de índices
+     * para a coluna vacina_nome.
+     * 
+     * A primeira é um arquivo com o nome de cada vacina e o nome dos arquivos
+     * que compõem a segunda camada, que contêm o código e endereço no arquivo
+     * de dados de cada paciente vacinado com aquela vacina.
+     */
+
+    // Gerar um vetor que contém <nome, código, frequência> de cada vacina
+    vector<tuple<string, int, int>> vaccines = generateFirstLayer();
+
+    generateSecondLayer(vaccines);
+    
+}
+
+vector<tuple<string, int, int>> VaccineIndex::generateFirstLayer()
+{
+    /**
+     * @brief Gera a primeira camada de índices. Essa camada contém o nome e o
+     * código de cada vacina presente no arquivo de dados, além do nome do
+     * nome e tamanho do arquivo de índices referente a cada vacina.
+     * 
+     * @return Um vetor agregando <nome, código, frequência> de cada vacina.
+     */
+
+    // Abrir o arquivo da primeira camada para escrita em texto
+    ofstream oFirstIndexFile(ARQUIVO_INDICES_VACINA, ios::out);
+
+    if (!oFirstIndexFile) {
+        cout << "Não foi possível criar a primeira camada de índices." << endl;
+        exit(0);
+    }
+
+    cout << "Gerando a primeira camada dos índices de vacina..." << endl;
+
+    // Gerar um vetor com o nome de todas vacinas no arquivo de dados e quantas
+    // vezes cada uma aparece.
+    vector<tuple<string, int, int>> vaccines;
+    Archive<ifstream> *archiveIn = dataFile.archiveIn;
+    Registry temp;
+    string name;
+    int code;
+
+    for (int index = 1; index <= dataFile.size(); index++) {
+        /**
+         * Varredura do arquivo de dados, coletando os diferentes nomes de
+         * vacinas utilizados.
+         */
+
+        *archiveIn >> temp;
+        name = temp.vaccine_name;
+        code = temp.vaccine_code;
+        if (codeNotInVector(code, vaccines)) 
+        {
+            vaccines.push_back(make_tuple(name, code, 1));
+            firstLayerSize++;
+        }
+
+    }
+
+    dataFile.resetInputStream();
+
+    // Escrever tudo no .csv dos índices
+    oFirstIndexFile << "Vacina_Codigo,Vacina_Nome,Arquivo_Nome,Tamanho_Arquivo" << endl;
+    for (auto & vaccine : vaccines) {
+        oFirstIndexFile << get<1>(vaccine)                  //Código da vacina
+        << "," << get<0>(vaccine)                           //Nome da vacina
+        << "," << "Vacina_" << get<1>(vaccine) << ".bin"    //Nome do arquivo
+        << "," << get<2>(vaccine) << endl;                  //Tamanho do arquivo             
+    }
+
+    oFirstIndexFile.close();
+
+    return vaccines;
+}
+
+void VaccineIndex::generateSecondLayer(vector<tuple<string, int, int>> vaccines)
+{
+    /**
+     * @brief Gera a segunda camada de índices. Essa camada contém somente uma
+     * associação entre um paciente_codigo e o seu endereço no arquivo de dados.
+     * 
+     * @param vaccines O vetor gerado em generateFirstLayer() que contém o
+     * <nome, código, frequência> de cada vacina.
+     */
+
+    cout << "Gerando a segunda camada dos índices de vacina..." << endl;
+
+    string fileName;
+    ofstream oVaccineFile;
+    Archive<ifstream> *archiveIn = dataFile.archiveIn;
+    Archive<ofstream> *archiveOut;
+    Registry temp;
+    int patient_code, vaccine_code, position, vaccine_count, count;
+    string name;
+
+    for (auto & vaccine : vaccines)
+    {
+        vaccine_code = get<1>(vaccine);
+        vaccine_count = get<2>(vaccine);
+
+        //Abrir um arquivo de índices binário pra essa vacina
+        fileName = "Vacina_" + to_string(vaccine_code) + ".bin";
+        oVaccineFile.open(fileName, ios::out | ios::binary);
+        archiveOut = new Archive(oVaccineFile);
+
+        //Escrever todos os registros com essa vacina
+        count = 0;
+        while (count < vaccine_count) 
+        {
+            position = dataFile.iFile.tellg();
+            *archiveIn >> temp;
+            patient_code = temp.patient_code;
+
+            if (temp.vaccine_code == vaccine_code) 
+            {
+                *archiveOut << make_pair(patient_code, position);
+                count++;
+            }
+        }
+
+        dataFile.resetInputStream();
+        oVaccineFile.close();
+
+        // printVaccineFile(fileName, vaccine_count);
+    }
+}
+
+void VaccineIndex::printVaccineFile(string fileName, int vaccine_count)
+{
+    /**
+     * @brief Função para mostrar todos os pacientes vacinados com uma vacina.
+     * Puramente para teste. (Por ora) 
+     */
+
+    ifstream iFile;
+    iFile.open(fileName, ios::in);
+    Archive<ifstream> archiveIn(iFile);
+    pair<int,int> index;
+
+    cout << "=======================================================" << endl;
+    cout << "Arquivo: " << fileName << endl;
+
+    for (int count = 0; count < vaccine_count; count++)
+    {
+        archiveIn >> index;
+        // cout << "Código: " << index.first << " Endereço: " << index.second << endl;
+        dataFile.getRegistryByAddress(index.second).printRegistryInfo();
+    }
+
+    iFile.close();
+}
+
+bool VaccineIndex::codeNotInVector(int code, vector<tuple<string, int, int>> &vaccines)
+{
+    /**
+     * @brief Verifica a presença de um vacina_codigo no vetor de vacinas.
+     * Se o código está presente, incrementa a frequência da vacina para indicar
+     * a busca repetida.
+     * 
+     * @returns true: Quando o código não foi encontrado
+     * @returns false: Quando o código foi encontrado
+     */
+    for (auto & vaccine : vaccines)
+    {
+        if (get<1>(vaccine) == code)
+        {
+            get<2>(vaccine)++;
+            return false;
+        }
+    }
+
+    return true;
+}

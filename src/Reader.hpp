@@ -16,17 +16,11 @@ class Reader
 public:
     string fileName;
     rapidcsv::Document *doc;
-    vector<string> getRow(int index);
 
     Reader(string fileName);
+    
+    vector<string> getRow(int index);
 };
-
-// Reader::Reader() 
-// {
-//     this->fileName = ARQUIVO_TEXTO;
-
-//     this->doc = new rapidcsv::Document(this->fileName, rapidcsv::LabelParams(0, -1));
-// }
 
 Reader::Reader(string fileName)
 {
@@ -36,8 +30,8 @@ Reader::Reader(string fileName)
     // nenhuma coluna é o label de cada linha 
     // (embora a coluna 0 seja, mas aí não tem como acessar o valor dela)
     doc = new rapidcsv::Document(this->fileName, rapidcsv::LabelParams(0, -1));
-    // rapidcsv::Document doc(fileName, rapidcsv::LabelParams(0, -1));
-    cout << "Criado reader csv..." << endl;
+
+    // cout << "Criado reader csv..." << endl;
 }
 
 vector<string> Reader::getRow(int index)

@@ -27,6 +27,7 @@ void clearScreen();
 
 DataFile *dataFile = new DataFile();
 CodeIndex *codeIndex = new CodeIndex(*dataFile);
+VaccineIndex *vaccineIndex = new VaccineIndex(*dataFile);
 
 int main() {
 
@@ -87,12 +88,12 @@ void searchByCode()
      */
     int code;
     while ((cout << "Insira o código a ser pesquisado:" << endl ) 
-                && !(cin >> code) || code < 0) 
-        {
-            cout << "Código Inválido. Somente inteiros positivos são permitidos" << endl;
-            cin.clear();
-            cin.ignore(numeric_limits<streamsize>::max(), '\n');
-        }
+            && !(cin >> code) || code < 0) 
+    {
+        cout << "Código Inválido. Somente inteiros positivos são permitidos" << endl;
+        cin.clear();
+        cin.ignore(numeric_limits<streamsize>::max(), '\n');
+    }
 
     cout << endl;
     codeIndex->searchRegistryByCode(code);
@@ -111,5 +112,47 @@ void searchByDate()
 
 void searchByVaccine()
 {
-    //TODO
+    /**
+     * @brief Função para procurar todos os Registros de uma vacina.
+     * Permite procurar nesses Registros por outro parâmetro.
+     */
+
+    Reader *reader = new Reader(vaccineIndex->fileName);
+    vector<string> row;
+    vector<pair<int, string>> vaccines;
+
+    // Pegar o nome de todas as vacinas
+    for (int count = 0; count < vaccineIndex->firstLayerSize; count++)
+    {
+        row = reader->getRow(count);
+        vaccines.push_back(make_pair(count + 1, row[1]));
+    }
+
+    // Fazer um menuzinho
+    cout << "Vacinas encontradas:" << endl;
+    for (auto & vaccine : vaccines)
+    {
+        cout << vaccine.first << ") " << vaccine.second << endl;
+    }
+    
+    // Laço pra ler um código válido
+    int code;
+    while ((cout << "Selecione o código desejado:" << endl) 
+            && !(cin >> code) || code < 0 || code > vaccineIndex->firstLayerSize) 
+    {
+        cout << "Código Inválido." << endl;
+        cin.clear();
+        cin.ignore(numeric_limits<streamsize>::max(), '\n');
+    }
+
+    // Encontrar o arquivo certo e se for necessário, abrir ele
+    for (auto & vaccine : vaccines)
+    {
+        if (code == vaccine.first) {
+            row = reader->getRow(code-1);
+            cout << "Foram encontrados " << row[3] << " pacientes vacinados com essa vacina." << endl;
+            sleep(2);
+            //TODO (Fazer uma segunda consulta nesses dados)
+        }
+    }
 }

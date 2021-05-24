@@ -1,5 +1,12 @@
 #pragma once
 
+/**
+ * @file DataFileHandler.hpp
+ * 
+ * @brief Arquivo em que estão todos os métodos de acesso ao arquivo binário
+ * de dados.
+ */
+
 // Includes da STL
 #include <iostream>
 #include <fstream>
@@ -18,6 +25,9 @@
 
 #define ARQUIVO_BINARIO "RS.bin"
 
+// Flag pra forçar a geração de todos os arquivos
+#define FLAG_TESTE true
+
 using namespace std;
 
 class DataFile
@@ -33,7 +43,7 @@ public:
     void printBinaryDataFile();
     Registry getRegistryByAddress(const int address);
     constexpr int size();
-
+    void resetInputStream();
 
 private:
 
@@ -49,12 +59,21 @@ DataFile::DataFile()
      */
 
     fileName = ARQUIVO_TEXTO;
-    iFile.open(ARQUIVO_BINARIO, ios::in | ios::binary);
 
-    if (!iFile) 
+    if (FLAG_TESTE) 
     {
         generateBinaryDataFile();
         iFile.open(ARQUIVO_BINARIO, ios::in  | ios::binary);
+    } 
+    else 
+    {
+        iFile.open(ARQUIVO_BINARIO, ios::in | ios::binary);
+
+        if (!iFile) 
+        {
+            generateBinaryDataFile();
+            iFile.open(ARQUIVO_BINARIO, ios::in  | ios::binary);
+        }
     }
 
     archiveIn = new Archive(iFile);
@@ -73,6 +92,11 @@ constexpr int DataFile::size()
      * o nome do arquivo texto usado.
      */
     return (ARQUIVO_TEXTO == "RS_Mini.csv") ? 50 : 100000;
+}
+
+void DataFile::resetInputStream()
+{
+    iFile.seekg(0, iFile.beg);
 }
 
 void DataFile::generateBinaryDataFile() {
@@ -127,7 +151,7 @@ void DataFile::printBinaryDataFile() {
         
     }
 
-    iFile.seekg(0, iFile.beg);
+    resetInputStream();
 }
 
 Registry DataFile::getRegistryByAddress(const int address) 
@@ -145,7 +169,7 @@ Registry DataFile::getRegistryByAddress(const int address)
 
     iFile.seekg(address, iFile.beg);
     *archiveIn >> result;
-    iFile.seekg(0, iFile.beg);
+    resetInputStream();
 
     return result;
 }

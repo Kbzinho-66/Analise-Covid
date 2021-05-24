@@ -73,7 +73,7 @@ void BinarySearchTree::insertIndex(std::string city, int index)
      */
     if (root != NULL)
     {
-        insert(city, index, root);
+        insertIndex(city, index, root);
     }
     else
     {
@@ -85,7 +85,7 @@ void BinarySearchTree::insertIndex(std::string city, int index)
     }
 }
 
-void insert(std::string city, int index, Node *leaf)
+void insertIndex(std::string city, int index, Node *leaf)
 {
     /**
      * @brief Função recursiva que irá realizar a inserção 
@@ -100,7 +100,7 @@ void insert(std::string city, int index, Node *leaf)
     {
         if (leaf->left != NULL)
         {
-            insert(city, index, leaf->left);
+            insertIndex(city, index, leaf->left);
         }
         else
         {
@@ -115,7 +115,7 @@ void insert(std::string city, int index, Node *leaf)
     {
         if (leaf->right != NULL)
         {
-            insert(city, index, leaf->right);
+            insertIndex(city, index, leaf->right);
         }
         else
         {
@@ -236,5 +236,6 @@ void BinarySearchTree::getRegistry(int index)
         return;
     }
 
-    else cout << "Código não encontrado." << endl << endl;
+    else
+        cout << "Código não encontrado." << endl << endl;
 }
