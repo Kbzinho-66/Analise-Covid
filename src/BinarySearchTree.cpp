@@ -264,7 +264,7 @@ void BinarySearchTree::preorderPrint(){
 
 void BinarySearchTree::preorderPrint(Node *leaf){
 	if(leaf != NULL){
-		cout << leaf->city << "," << leaf->indexes.size() << ";";
+		cout << leaf->city << ", " << leaf->indexes.size() << "vacinados;" << endl;
 		inorderPrint(leaf->left);
 		inorderPrint(leaf->right);
 	}
@@ -278,7 +278,7 @@ void BinarySearchTree::inorderPrint(){
 void BinarySearchTree::inorderPrint(Node *leaf){
 	if(leaf != NULL){
 		inorderPrint(leaf->left);
-		cout << leaf->city << "," << leaf->indexes.size() << ";";
+		cout << leaf->city << "," << leaf->indexes.size() << ";" << endl;
 		inorderPrint(leaf->right);
 	}
 }

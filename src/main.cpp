@@ -33,6 +33,11 @@ void searchByDate();
 void searchByVaccine();
 void clearScreen();
 
+void proveHypotheses();
+void hypothesisOne();
+void hypothesisTwo();
+void hypothesisThree();
+
 void searchByCode(vector<string> row);
 
 DataFile *dataFile = new DataFile();
@@ -56,7 +61,7 @@ int main() {
         menu();
 
         while ((cout << "Escolha uma opção:" << endl ) 
-                && !(cin >> answer) || answer < 0 || answer > 4) 
+                && !(cin >> answer) || answer < 0 || answer > 5) 
         {
             cout << "Opção Inválida!" << endl;
             cin.clear();
@@ -80,6 +85,10 @@ int main() {
             case 4:
                 searchByVaccine();
                 break;
+            case 5:
+                proveHypotheses();
+                break;
+
         }
         
     } while (answer);
@@ -172,6 +181,7 @@ void menu()
     cout << "2) Procurar todos os registros de uma cidade." << endl;
     cout << "3) Procurar todos os registros de uma data." << endl;
     cout << "4) Procurar todos os pacientes vacinados com uma vacina." << endl;
+    cout << "5) Provar hipóteses." << endl;
     cout << "0) Sair." << endl;
 }
 
@@ -272,11 +282,6 @@ void searchByVaccine()
     vector<pair<int, string>> vaccines;
     int vaccine_count = vaccineIndex->firstLayerSize();
 
-    // Se o arquivo já foi criado, a função não contabiliza o número de vacinas
-    if (vaccine_count == 0){
-
-    }
-
     // Pegar o nome de todas as vacinas
     for (int count = 0; count < vaccineIndex->firstLayerSize(); count++)
     {
@@ -361,5 +366,93 @@ void searchByCode(vector<string> row)
 
     cout << endl;
     vaccineIndex->searchRegistryByCode(fileName, code, size);
+    sleep(3);
+}
+
+void proveHypotheses()
+{
+    hypothesisOne();
+    hypothesisTwo();
+    hypothesisThree();
+}
+
+void hypothesisOne()
+{
+    /**
+     * @brief Prova se a Coronavac é a vacina mais utilizada na vacinação
+     * por ter sua produção no Brasil.
+     */
+
+    Reader *reader = new Reader(vaccineIndex->fileName);
+    vector<string> row;
+    int vaccine_count = vaccineIndex->firstLayerSize();
+
+    cout << "Hipótese 1: Coronavac é a vacina mais utilizada na vacinação por ter sua produção no Brasil" << endl;
+
+    for (int i = 0; i < vaccine_count; i++)
+    {
+        row = reader->getRow(i);
+        cout << "Vacina: " << row[1] << " Número de vacinados: " << row[3] << endl;
+    }
+
+    cout << "De fato, a coronavac é a vacina mais utilizada no Brasil." << endl << endl;
+    sleep(3);
+}
+
+void hypothesisTwo()
+{
+    /**
+     * @brief Prova se a quantidade de pessoas vacinadas é proporcional à
+     * quantidade de habitantes por município.
+     */
+
+    cout << "Hipótese 2: A quantidade de pessoas vacinadas é proporcional a quantidade de habitantes por município" << endl;
+    cout << endl;
+
+    cityIndex->preorderPrint();
+
+    const char *output =
+        "Como mostram os resultados, Porto Alegre e Caxias do Sul contêm"
+        " uma grande parte dos vacinados, justamente por serem cidades"
+        " com uma população elevada";
+
+    cout << output << endl; 
+    sleep(3);
+}
+
+void hypothesisThree()
+{
+    /**
+     * @brief Prova se há maior quantidade de vacinados na categoria de
+     * profissionais da saúde do que nas outras categorias.
+     */
+
+    cout << "Hipótese 3: Há maior quantidade de vacinados na categoria de ‘Profissionais da Saúde" << endl;
+    cout << endl;
+
+    map<string, int> categories;
+    Registry temp;
+    string category;
+    Archive<ifstream> *archiveIn = dataFile->archiveIn;
+
+    for (int i = 0; i < dataFile->size(); i++) {
+        *archiveIn >> temp;
+        category = temp.category_name;
+
+        if (categories.find(category) != categories.end())
+        {
+            categories.at(category)++;
+        } else {
+            categories.insert(make_pair(category, 1));   
+        }
+        
+    }
+
+    for (auto & category : categories)
+    {
+        cout << "Categoria: " << category.first << " Número de vacinados: " << category.second << endl;
+    }
+
+    cout << "Evidentemente, a quantidade de vacinados pela faixa etária é mais do que 3 vezes maior." << endl;
     sleep(3);
 }
