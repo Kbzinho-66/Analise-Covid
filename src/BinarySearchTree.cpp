@@ -43,6 +43,8 @@ public:
     bool hasRegistryIndex(int index);
     Node *tree_minimun(Node *leaf);
     void getRegistry(int index);
+	void inorderPrint();
+    void preorderPrint();
 
 private:
     void insertIndex(std::string city, int index, Node *leaf);
@@ -50,6 +52,9 @@ private:
     Node *searchCity(std::string city, Node *leaf);
     bool searchRegistry(int index, Node *leaf);
     bool indexAlreadyInVector(int target, vector<int> indexes);
+    void preorderPrint(Node *leaf);
+	void inorderPrint(Node *leaf);
+
 
     Node *root;
 };
@@ -239,13 +244,41 @@ void BinarySearchTree::getRegistry(int index)
     }
 
     else
-        cout << "Código não encontrado." << endl << endl;
+        cout << "Código não encontrado." << endl
+             << endl;
 }
 
 bool BinarySearchTree::indexAlreadyInVector(int target, vector<int> indexes)
 {
-    for (auto & index : indexes)
-        if (index == target) return true;
+    for (auto &index : indexes)
+        if (index == target)
+            return true;
 
     return false;
+}
+
+void BinarySearchTree::preorderPrint(){
+	preorderPrint(root);
+	cout << "\n";
+}
+
+void BinarySearchTree::preorderPrint(Node *leaf){
+	if(leaf != NULL){
+		cout << leaf->city << "," << leaf->indexes.size() << ";";
+		inorderPrint(leaf->left);
+		inorderPrint(leaf->right);
+	}
+}
+
+void BinarySearchTree::inorderPrint(){
+	inorderPrint(root);
+	cout << "\n";
+}
+
+void BinarySearchTree::inorderPrint(Node *leaf){
+	if(leaf != NULL){
+		inorderPrint(leaf->left);
+		cout << leaf->city << "," << leaf->indexes.size() << ";";
+		inorderPrint(leaf->right);
+	}
 }
