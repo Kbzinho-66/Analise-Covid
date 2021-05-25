@@ -79,10 +79,14 @@ CodeIndex::CodeIndex(DataFile &dataFile_) : dataFile(dataFile_)
     }
     else
     {
+        int size;
+
         // Tenta abrir o arquivo de índices pra leitura
         iIndexFile.open(ARQUIVO_INDICES_CODIGO, ios::in | ios::binary);
+        size = iIndexFile.seekg(0, iIndexFile.end).tellg();
+        iIndexFile.seekg(0, iIndexFile.beg);
 
-        if (!iIndexFile)
+        if (!iIndexFile || size == 0)
         {
             // Se não conseguiu, gerar o arquivo e abrir pra leitura
             generateCodeIndexFile();
@@ -90,8 +94,6 @@ CodeIndex::CodeIndex(DataFile &dataFile_) : dataFile(dataFile_)
         }
     }
 
-    
-    
     // printCodeIndexFile();
 }
 
@@ -232,11 +234,11 @@ class VaccineIndex
      */
     public:
         std::string fileName;
-        int firstLayerSize;
 
         VaccineIndex(DataFile &dataFile_);
         ~VaccineIndex(void);
 
+        int firstLayerSize(void);
         void searchRegistryByVaccine_Name(string vaccine_name);
         void searchRegistryByCode(string fileName, int patient_code, int size);
         void printVaccineFile(string fileName, int vaccine_count);
@@ -248,7 +250,7 @@ class VaccineIndex
         void printVaccineIndexFile(void);
         void generateVaccineIndexFile(void);
         vector<tuple<string, int, int>> generateFirstLayer(void);
-        void generateSecondLayer(vector<tuple<string, int, int>> vaccines);
+        void generateSecondLayer(const vector<tuple<string, int, int>> &vaccines);
         int binarySearch(Archive<ifstream> archiveInIndex, int code, int begin, int end, int size) ;
         bool codeNotInVector(int code, vector<tuple<string, int, int>> &vaccines);
 };
@@ -264,7 +266,7 @@ VaccineIndex::VaccineIndex(DataFile &dataFile_): dataFile(dataFile_)
      */
 
     fileName = ARQUIVO_INDICES_VACINA;
-    firstLayerSize = 0;
+    // firstLayerSize = 0;
 
     if (FLAG_TESTE)
     {
@@ -273,14 +275,17 @@ VaccineIndex::VaccineIndex(DataFile &dataFile_): dataFile(dataFile_)
     }
     else
     {
+        int size;
         // Tenta abrir o arquivo de índices pra leitura
         iIndexFile.open(ARQUIVO_INDICES_VACINA, ios::in);
+        size = iIndexFile.seekg(0, iIndexFile.end).tellg();
+        iIndexFile.seekg(0, iIndexFile.beg);
 
-        if (!iIndexFile)
+        if (!iIndexFile || size == 0)
         {
             // Se não conseguiu, gerar o arquivo e abrir pra leitura
             generateVaccineIndexFile();
-            // iIndexFile.open(ARQUIVO_INDICES_VACINA, ios::in);
+            iIndexFile.open(ARQUIVO_INDICES_VACINA, ios::in);
         }
     }
     
@@ -290,6 +295,12 @@ VaccineIndex::VaccineIndex(DataFile &dataFile_): dataFile(dataFile_)
 VaccineIndex::~VaccineIndex()
 {
     iIndexFile.close();
+}
+
+int VaccineIndex::firstLayerSize()
+{
+
+    return (dataFile.fileName == "RS_Mini.csv") ? 2 : 3;
 }
 
 void VaccineIndex::generateVaccineIndexFile() 
@@ -350,7 +361,7 @@ vector<tuple<string, int, int>> VaccineIndex::generateFirstLayer()
         if (codeNotInVector(code, vaccines)) 
         {
             vaccines.push_back(make_tuple(name, code, 1));
-            firstLayerSize++;
+            // firstLayerSize++;
         }
 
     }
@@ -371,7 +382,7 @@ vector<tuple<string, int, int>> VaccineIndex::generateFirstLayer()
     return vaccines;
 }
 
-void VaccineIndex::generateSecondLayer(vector<tuple<string, int, int>> vaccines)
+void VaccineIndex::generateSecondLayer(const vector<tuple<string, int, int>> &vaccines)
 {
     /**
      * @brief Gera a segunda camada de índices. Essa camada contém somente uma
@@ -408,6 +419,7 @@ void VaccineIndex::generateSecondLayer(vector<tuple<string, int, int>> vaccines)
             position = dataFile.iFile.tellg();
             *archiveIn >> temp;
             patient_code = temp.patient_code;
+
 
             if (temp.vaccine_code == vaccine_code) 
             {
