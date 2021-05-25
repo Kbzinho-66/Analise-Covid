@@ -23,8 +23,8 @@ class Node
 public:
     std::string city;
     vector<int> indexes;
-    Node *right;
     Node *left;
+    Node *right;
 };
 
 class BinarySearchTree
@@ -49,6 +49,7 @@ private:
     void deleteCity(std::string city, Node *leaf);
     Node *searchCity(std::string city, Node *leaf);
     bool searchRegistry(int index, Node *leaf);
+    bool indexAlreadyInVector(int target, vector<int> indexes);
 
     Node *root;
 };
@@ -79,13 +80,13 @@ void BinarySearchTree::insertIndex(std::string city, int index)
     {
         root = new Node;
         root->city = city;
-        root->indexes.assign(index, 1);
+        root->indexes.push_back(index);
         root->left = NULL;
         root->right = NULL;
     }
 }
 
-void insertIndex(std::string city, int index, Node *leaf)
+void BinarySearchTree::insertIndex(std::string city, int index, Node *leaf)
 {
     /**
      * @brief Função recursiva que irá realizar a inserção 
@@ -106,7 +107,7 @@ void insertIndex(std::string city, int index, Node *leaf)
         {
             leaf->left = new Node;
             leaf->left->city = city;
-            leaf->indexes.assign(index, 1);
+            leaf->left->indexes.push_back(index);
             leaf->left->left = NULL;
             leaf->left->right = NULL;
         }
@@ -121,7 +122,7 @@ void insertIndex(std::string city, int index, Node *leaf)
         {
             leaf->right = new Node;
             leaf->right->city = city;
-            leaf->indexes.assign(index, 1);
+            leaf->right->indexes.push_back(index);
             leaf->right->right = NULL;
             leaf->right->left = NULL;
         }
@@ -129,7 +130,8 @@ void insertIndex(std::string city, int index, Node *leaf)
     else if (city.compare(leaf->city) == 0)
     {
         // se cidade já existe na árvore só adiciona o índice
-        leaf->indexes.push_back(index);
+        if (!indexAlreadyInVector(index, leaf->indexes))
+            leaf->indexes.push_back(index);
     }
 }
 
@@ -158,7 +160,7 @@ Node *BinarySearchTree::searchCity(std::string city, Node *leaf)
      * @return O nodo da cidade encontrada ou nulo caso nodo
      * não exista
      */
-    if (leaf == NULL)
+    if (leaf != NULL)
     {
         if (city == leaf->city)
         {
@@ -223,7 +225,7 @@ bool BinarySearchTree::searchRegistry(int index, Node *leaf)
 
 void BinarySearchTree::getRegistry(int index)
 {
-    Registry::Registry registry;
+    Registry registry;
 
     if (hasRegistryIndex(index))
     {
@@ -238,4 +240,12 @@ void BinarySearchTree::getRegistry(int index)
 
     else
         cout << "Código não encontrado." << endl << endl;
+}
+
+bool BinarySearchTree::indexAlreadyInVector(int target, vector<int> indexes)
+{
+    for (auto & index : indexes)
+        if (index == target) return true;
+
+    return false;
 }

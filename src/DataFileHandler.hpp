@@ -26,7 +26,7 @@
 #define ARQUIVO_BINARIO "RS.bin"
 
 // Flag pra forçar a geração de todos os arquivos
-#define FLAG_TESTE true
+#define FLAG_TESTE false
 
 using namespace std;
 

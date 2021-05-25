@@ -28,7 +28,7 @@
 #define ARQUIVO_INDICES_VACINA "Indices_Vacina_RS.txt"
 
 // Flag pra forçar a geração de todos os arquivos
-#define FLAG_TESTE true
+#define FLAG_TESTE false
 
 /////////////////////////////////////////////////////////////////////
 /////          ÍNDICES ORDENADOS PELO PACIENTE_CODIGO           /////
@@ -184,7 +184,6 @@ void CodeIndex::searchRegistryByCode(int patient_code)
      */
 
     Archive<ifstream> archiveInIndex(iIndexFile);
-    // int address = binarySearch(archiveInIndex, patient_code, 0, dataFile.size());
     int address = binarySearch(archiveInIndex, patient_code, 0, size());
 
     if (address != -1) dataFile.getRegistryByAddress(address).printRegistryInfo();
@@ -239,6 +238,8 @@ class VaccineIndex
         ~VaccineIndex(void);
 
         void searchRegistryByVaccine_Name(string vaccine_name);
+        void searchRegistryByCode(string fileName, int patient_code, int size);
+        void printVaccineFile(string fileName, int vaccine_count);
 
     private:
         std::ifstream iIndexFile;
@@ -248,8 +249,7 @@ class VaccineIndex
         void generateVaccineIndexFile(void);
         vector<tuple<string, int, int>> generateFirstLayer(void);
         void generateSecondLayer(vector<tuple<string, int, int>> vaccines);
-        void printVaccineFile(string fileName, int vaccine_count);
-        int binarySearch(Archive<ifstream> archiveIn, string vaccine_name, int begin, int end);
+        int binarySearch(Archive<ifstream> archiveInIndex, int code, int begin, int end, int size) ;
         bool codeNotInVector(int code, vector<tuple<string, int, int>> &vaccines);
 };
 
@@ -426,8 +426,7 @@ void VaccineIndex::generateSecondLayer(vector<tuple<string, int, int>> vaccines)
 void VaccineIndex::printVaccineFile(string fileName, int vaccine_count)
 {
     /**
-     * @brief Função para mostrar todos os pacientes vacinados com uma vacina.
-     * Puramente para teste. (Por ora) 
+     * @brief Função para mostrar os 5 primeiros e últimos registros de um arquivo
      */
 
     ifstream iFile;
@@ -435,17 +434,19 @@ void VaccineIndex::printVaccineFile(string fileName, int vaccine_count)
     Archive<ifstream> archiveIn(iFile);
     pair<int,int> index;
 
-    cout << "=======================================================" << endl;
-    cout << "Arquivo: " << fileName << endl;
+    cout << "=========================================================" << endl;
 
     for (int count = 0; count < vaccine_count; count++)
     {
         archiveIn >> index;
-        // cout << "Código: " << index.first << " Endereço: " << index.second << endl;
-        dataFile.getRegistryByAddress(index.second).printRegistryInfo();
+        if (count < 5 || count > vaccine_count - 6)
+        {
+            dataFile.getRegistryByAddress(index.second).printRegistryInfo();
+        }
     }
 
     iFile.close();
+    sleep(3);
 }
 
 bool VaccineIndex::codeNotInVector(int code, vector<tuple<string, int, int>> &vaccines)
@@ -468,4 +469,56 @@ bool VaccineIndex::codeNotInVector(int code, vector<tuple<string, int, int>> &va
     }
 
     return true;
+}
+
+void VaccineIndex::searchRegistryByCode(string fileName, int patient_code, int size)
+{
+    /**
+     * @brief Método para procurar o endereço de um registro em um arquivo
+     * de índices específico.
+     * 
+     * @param fileName O arquivo específico de uma vacina
+     * 
+     * @param patient_code O código do paciente a ser retornado
+     */
+
+    ifstream iFile(fileName, ios::in | ios::binary);
+
+    Archive<ifstream> archiveInIndex(iFile);
+    int address = binarySearch(archiveInIndex, patient_code, 0, size, size);
+
+    if (address != -1) dataFile.getRegistryByAddress(address).printRegistryInfo();
+    else cout << "Código não encontrado." << endl << endl;
+}
+
+int VaccineIndex::binarySearch(Archive<ifstream> archiveInIndex, int code, int begin, int end, int size) 
+{
+    /**
+     * @brief Função que faz pesquisa binária no arquivo de índices para
+     * encontrar o paciente_codigo pesquisado.
+     * 
+     * @param archiveInIndex O objeto Archive responsável pela serialização
+     * e desserialização dos índices.
+     * @param code O paciente_codigo pesquisado
+     * @param begin A posição inicial da parte do arquivo que será pesquisada
+     * @param end A posição final da parte do arquivo que será pesquisada
+     * @param size O tamanho do arquivo de índices
+     */
+
+    pair<int,int> index;
+    int middle = (begin + end) / 2;
+    
+    if (middle >= size) return -1;
+    iIndexFile.seekg(middle * TAMANHO_INDEX);
+    archiveInIndex >> index;
+
+    if (code == index.first) {
+        return index.second;
+    } else if (code < index.first && begin != end) {
+        return binarySearch(archiveInIndex, code, begin, middle, size);
+    } else if (begin != end) {
+        return binarySearch(archiveInIndex, code, middle+1, end, size);
+    }
+
+    return -1;
 }
