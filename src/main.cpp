@@ -3,6 +3,7 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include <regex>
 #include <unistd.h>
 
 // Bibliotecas
@@ -13,6 +14,7 @@
 // Nossos headers
 #include "BinarySearchTree.cpp"
 #include "DataFileHandler.hpp"
+#include "HashMap.hpp"
 #include "IndexFileHandler.hpp"
 #include "Reader.hpp"
 #include "Registry.hpp"
@@ -20,6 +22,7 @@
 using namespace std;
 
 void initializeTree();
+void initializeHash();
 
 int readValidCode();
 void menu();
@@ -36,10 +39,12 @@ DataFile *dataFile = new DataFile();
 CodeIndex *codeIndex = new CodeIndex(*dataFile);
 VaccineIndex *vaccineIndex = new VaccineIndex(*dataFile);
 BinarySearchTree *cityIndex = new BinarySearchTree();
+HashMap *dateIndex = new HashMap(*codeIndex);
 
 int main() {
 
     initializeTree();
+    initializeHash();
 
     int answer;
 
@@ -96,6 +101,23 @@ void initializeTree()
     dataFile->resetInputStream();
 }
 
+void initializeHash()
+{
+    cout << "Gerando o mapa de hash..." << endl;
+
+    Registry temp;
+    Archive <ifstream> *archiveIn = dataFile->archiveIn;
+    int position;
+
+    for (int code = 0; code < dataFile->size(); code++){
+        position = dataFile->iFile.tellg();
+        *archiveIn >> temp;
+        dateIndex->insertNewValue(temp.application_date, temp.patient_code);
+    }
+
+    dataFile->resetInputStream();
+}
+
 int readValidCode()
 {
     int code;
@@ -124,6 +146,23 @@ int readValidInnerMenuAnswer()
 
     cout << endl;
     return answer;
+}
+
+string readValidDate()
+{
+    static const regex dateFormat(R"([12]\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01]))"); 
+    string date;
+
+    while ((cout << "Insira uma data, no formato YYYY-MM-DD." << endl ) 
+            && !(cin >> date) || !regex_match(date, dateFormat)) 
+    {
+        cout << "Data Inválida!" << endl;
+        cin.clear();
+        cin.ignore(numeric_limits<streamsize>::max(), '\n');
+    }
+
+    cout << endl;
+    return date;
 }
 
 void menu()
@@ -217,7 +256,8 @@ void searchByCity()
 
 void searchByDate()
 {
-    //TODO
+    dateIndex->printAllValuesFromKey(readValidDate());
+    sleep(3);
 }
 
 void searchByVaccine()
@@ -230,9 +270,15 @@ void searchByVaccine()
     Reader *reader = new Reader(vaccineIndex->fileName);
     vector<string> row;
     vector<pair<int, string>> vaccines;
+    int vaccine_count = vaccineIndex->firstLayerSize();
+
+    // Se o arquivo já foi criado, a função não contabiliza o número de vacinas
+    if (vaccine_count == 0){
+
+    }
 
     // Pegar o nome de todas as vacinas
-    for (int count = 0; count < vaccineIndex->firstLayerSize; count++)
+    for (int count = 0; count < vaccineIndex->firstLayerSize(); count++)
     {
         row = reader->getRow(count);
         vaccines.push_back(make_pair(count + 1, row[1]));
@@ -248,7 +294,7 @@ void searchByVaccine()
     // Laço pra ler um código válido
     int code;
     while ((cout << "Selecione o código desejado:" << endl) 
-            && !(cin >> code) || code < 0 || code > vaccineIndex->firstLayerSize) 
+            && !(cin >> code) || code < 0 || code > vaccineIndex->firstLayerSize()) 
     {
         cout << "Código Inválido." << endl;
         cin.clear();

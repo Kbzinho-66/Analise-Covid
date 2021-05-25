@@ -83,6 +83,8 @@ Registry::Registry(int patient_code, int patient_age,
     this->vaccine_name      = vaccine_name;
 }
 
+Registry::~Registry(){};
+
 Registry::Registry(std::vector<std::string> row) 
 {
     /**
@@ -115,8 +117,8 @@ void Registry::printRegistryInfo()
     std::cout << "Cidade de Aplicação da Vacina: " << application_city << std::endl;
     std::cout << "Data de Aplicação da Vacina: " << application_date << std::endl;
     std::cout << std::endl;
-    std::cout << "Fabricante da Vacina: " << vaccine_maker << std::endl;
     std::cout << "Nome da Vacina: " << vaccine_name << std::endl;
+    std::cout << "Fabricante da Vacina: " << vaccine_maker << std::endl;
     std::cout << "---------------------------------------------------------" << std::endl;
 }
 
@@ -131,8 +133,4 @@ template <class T> void  Registry::Serialize(T &archive)
         patient_sex & application_city & category_code & 
         category_name & vaccine_maker & application_date &
         vaccine_dose & vaccine_code & vaccine_name;
-}
-
-Registry::~Registry()
-{
 }

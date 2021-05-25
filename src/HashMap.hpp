@@ -17,16 +17,23 @@
 
 class HashMap
 {
-public:
-    std::multimap<std::string, int> map;
-    HashMap();
-    ~HashMap();
-    void insertNewValue(std::string dateKey, int entryPosition);
-    void printAllValuesFromKey(std::string dateKey);
-    void searchRegistry(int index);
+    public:
+        std::multimap<std::string, int> map;
+
+        HashMap(CodeIndex &codeIndex_);
+        ~HashMap();
+
+        void insertNewValue(std::string dateKey, int entryPosition);
+        void printAllValuesFromKey(std::string dateKey);
+
+    private:
+        CodeIndex &codeIndex;
+
+        void searchRegistry(int index);
+        void getRegistry(int index);
 };
 
-HashMap::HashMap()
+HashMap::HashMap(CodeIndex &codeIndex_) : codeIndex(codeIndex_)
 {
 }
 
@@ -49,13 +56,13 @@ void HashMap::printAllValuesFromKey(std::string dateKey)
      * @param dateKey A data que serve como chave
      */
 
-    DataFile::DataFile *dataFile = new DataFile();
+    DataFile *dataFile = new DataFile();
 
     std::multimap<std::string, int>::iterator it;
 
     if (map.find(dateKey) == map.end())
     {
-        std::cout << "Data não encontrada" << std::endl;
+        std::cout << "Data não encontrada." << std::endl;
         return;
     }
 
@@ -63,7 +70,7 @@ void HashMap::printAllValuesFromKey(std::string dateKey)
     {
         if (it->first == dateKey)
         {
-           getRegistry(it->second);
+            codeIndex.searchRegistryByCode(it->second);
         }
     }
 }
@@ -76,20 +83,11 @@ void HashMap::searchRegistry(int index)
     {
         if (it->second == index)
         {
-            getRegistry(index);
+            codeIndex.searchRegistryByCode(index);
             return;
         }
     }
 
     cout << "Código não encontrado." << endl
          << endl;
-}
-
-void getRegistry(int index)
-{
-    //abre arquivo da cidade
-    DataFile *dataFile = new DataFile();
-    CodeIndex *codeIndex = new CodeIndex(*dataFile);
-    //procura o indice
-    codeIndex->searchRegistryByCode(index);
 }

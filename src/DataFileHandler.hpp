@@ -20,8 +20,8 @@
 
 // Nomes dos arquivos - Descomentar aqui qual arquivo vai ser usado
 // e não esquecer de deletar os arquivos já gerados.
-#define ARQUIVO_TEXTO "RS_Mini.csv"
-// #define ARQUIVO_TEXTO "RS_Pequeno.csv"
+// #define ARQUIVO_TEXTO "RS_Mini.csv"
+#define ARQUIVO_TEXTO "RS_Pequeno.csv"
 
 #define ARQUIVO_BINARIO "RS.bin"
 
@@ -67,9 +67,13 @@ DataFile::DataFile()
     } 
     else 
     {
-        iFile.open(ARQUIVO_BINARIO, ios::in | ios::binary);
+        int size;
 
-        if (!iFile) 
+        iFile.open(ARQUIVO_BINARIO, ios::in | ios::binary);
+        size = iFile.seekg(0, iFile.end).tellg();
+        iFile.seekg(0, iFile.beg);
+
+        if (!iFile || size == 0) 
         {
             generateBinaryDataFile();
             iFile.open(ARQUIVO_BINARIO, ios::in  | ios::binary);
@@ -83,6 +87,7 @@ DataFile::DataFile()
 DataFile::~DataFile()
 {
     iFile.close();
+    delete archiveIn;
 }
 
 constexpr int DataFile::size() 
