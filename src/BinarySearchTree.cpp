@@ -38,21 +38,18 @@ public:
     ~BinarySearchTree();
 
     void insertIndex(std::string city, int index);
-    void deleteCity(std::string city);
     Node *searchCity(std::string city);
     bool hasRegistryIndex(int index);
-    Node *tree_minimun(Node *leaf);
     void getRegistry(int index);
+    void printCitiesAndTotalVaccinations();
 	void inorderPrint();
-    void preorderPrint();
 
 private:
     void insertIndex(std::string city, int index, Node *leaf);
-    void deleteCity(std::string city, Node *leaf);
     Node *searchCity(std::string city, Node *leaf);
     bool searchRegistry(int index, Node *leaf);
     bool indexAlreadyInVector(int target, vector<int> indexes);
-    void preorderPrint(Node *leaf);
+    void printCitiesAndTotalVaccinations(Node *leaf);
 	void inorderPrint(Node *leaf);
 
 
@@ -257,14 +254,14 @@ bool BinarySearchTree::indexAlreadyInVector(int target, vector<int> indexes)
     return false;
 }
 
-void BinarySearchTree::preorderPrint(){
-	preorderPrint(root);
+void BinarySearchTree::printCitiesAndTotalVaccinations(){
+	printCitiesAndTotalVaccinations(root);
 	cout << "\n";
 }
 
-void BinarySearchTree::preorderPrint(Node *leaf){
+void BinarySearchTree::printCitiesAndTotalVaccinations(Node *leaf){
 	if(leaf != NULL){
-		cout << leaf->city << ", " << leaf->indexes.size() << "vacinados;" << endl;
+		cout << leaf->city << ", " << leaf->indexes.size() << " vacinados;" << endl;
 		inorderPrint(leaf->left);
 		inorderPrint(leaf->right);
 	}
