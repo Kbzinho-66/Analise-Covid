@@ -25,7 +25,11 @@ void initializeTree();
 void initializeHash();
 
 int readValidCode();
+int readValidInnerMenuAnswer();
+string readValidDate();
+
 void menu();
+void innerMenu();
 
 void searchByCode();
 void searchByCity();
@@ -96,6 +100,12 @@ int main() {
 
 void initializeTree()
 {
+    /**
+     * @brief Inicializa a árvore binária de pesquisa, varrendo
+     * todo o arquivo de dados e agregando registros com base na
+     * cidade de aplicação da vacina.
+     */
+
     cout << "Gerando a árvore binária de pesquisa..." << endl;
 
     Registry temp;
@@ -112,6 +122,10 @@ void initializeTree()
 
 void initializeHash()
 {
+    /**
+     * @brief Inicializa o hash map, varrendo o arquivo de dados e agregando
+     * todos os registros com base na data de aplicação da vacina.
+     */
     cout << "Gerando o mapa de hash..." << endl;
 
     Registry temp;
@@ -129,6 +143,10 @@ void initializeHash()
 
 int readValidCode()
 {
+    /**
+     * @brief Lê um código válido para ser pesquisado no arquivo de índices.
+     * Por válido, entende-se um código numérico e maior que zero.
+     */
     int code;
     while ((cout << "Insira o código a ser pesquisado:" << endl ) 
             && !(cin >> code) || code < 0) 
@@ -144,6 +162,10 @@ int readValidCode()
 
 int readValidInnerMenuAnswer()
 {
+    /**
+     * @brief Lê uma resposta válida para o menu interno, que apresenta
+     * duas opções de pesquisa secundária sobre o resultado de uma pesquisa.
+     */
     int answer;
     while ((cout << "Escolha uma opção:" << endl ) 
             && !(cin >> answer) || answer < 0 || answer > 2) 
@@ -159,6 +181,10 @@ int readValidInnerMenuAnswer()
 
 string readValidDate()
 {
+    /**
+     * @brief Lê uma data no formato YYYY-MM-DD válida para pesquisa no
+     * hash map.
+     */
     static const regex dateFormat(R"([12]\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01]))"); 
     string date;
 
@@ -207,6 +233,11 @@ void searchByCode()
 
 void searchByCity()
 {
+    /**
+     * @brief Função que lê uma cidade e procura todos os registros que
+     * tiveram a aplicação da vacina nessa cidade.
+     * Permite fazer uma pesquisa de código secundária sobre esse resultado.
+     */
     string city_name;
     int answer, code;
     bool found = false;
@@ -266,6 +297,10 @@ void searchByCity()
 
 void searchByDate()
 {
+    /**
+     * @brief Função que lê uma data e permite procurar todos os registros que
+     * tiveram a aplicação da vacina nessa data.
+     */
     dateIndex->printAllValuesFromKey(readValidDate());
     sleep(3);
 }
