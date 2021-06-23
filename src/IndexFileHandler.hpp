@@ -14,6 +14,7 @@
 #include <string>
 #include <tuple>
 #include <vector>
+#include <unistd.h>
 
 // Bibliotecas
 #define HAS_CODECVT
@@ -299,7 +300,10 @@ VaccineIndex::~VaccineIndex()
 
 int VaccineIndex::firstLayerSize()
 {
-
+    /**
+     * @brief Maneira nada elegante de saber o tamanho da primeira camada do
+     * arquivo de vacinas.  
+     */
     return (dataFile.fileName == "RS_Mini.csv") ? 2 : 3;
 }
 
