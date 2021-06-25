@@ -444,7 +444,7 @@ void hypothesisTwo()
     cout << "Hipótese 2: A quantidade de pessoas vacinadas é proporcional a quantidade de habitantes por município" << endl;
     cout << endl;
 
-    cityIndex->preorderPrint();
+    cityIndex->inOrderPrint();
 
     const char *output =
         "Como mostram os resultados, Porto Alegre e Caxias do Sul contêm"

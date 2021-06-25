@@ -42,7 +42,7 @@ public:
     bool hasRegistryIndex(int index);
     void getRegistry(int index);
     void printCitiesAndTotalVaccinations();
-	void inorderPrint();
+	void inOrderPrint();
 
 private:
     void insertIndex(std::string city, int index, Node *leaf);
@@ -50,7 +50,7 @@ private:
     bool searchRegistry(int index, Node *leaf);
     bool indexAlreadyInVector(int target, vector<int> indexes);
     void printCitiesAndTotalVaccinations(Node *leaf);
-	void inorderPrint(Node *leaf);
+	void inOrderPrint(Node *leaf);
 
 
     Node *root;
@@ -262,20 +262,20 @@ void BinarySearchTree::printCitiesAndTotalVaccinations(){
 void BinarySearchTree::printCitiesAndTotalVaccinations(Node *leaf){
 	if(leaf != NULL){
 		cout << leaf->city << ", " << leaf->indexes.size() << " vacinados;" << endl;
-		inorderPrint(leaf->left);
-		inorderPrint(leaf->right);
+		inOrderPrint(leaf->left);
+		inOrderPrint(leaf->right);
 	}
 }
 
-void BinarySearchTree::inorderPrint(){
-	inorderPrint(root);
+void BinarySearchTree::inOrderPrint(){
+	inOrderPrint(root);
 	cout << "\n";
 }
 
-void BinarySearchTree::inorderPrint(Node *leaf){
+void BinarySearchTree::inOrderPrint(Node *leaf){
 	if(leaf != NULL){
-		inorderPrint(leaf->left);
+		inOrderPrint(leaf->left);
 		cout << leaf->city << "," << leaf->indexes.size() << ";" << endl;
-		inorderPrint(leaf->right);
+		inOrderPrint(leaf->right);
 	}
 }
