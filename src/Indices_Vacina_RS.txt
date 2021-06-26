@@ -1,3 +1,4 @@
 Vacina_Codigo,Vacina_Nome,Arquivo_Nome,Tamanho_Arquivo
-85,Vacina Covid-19 - Covishield,Vacina_85.bin,5
-86,Covid-19-Coronavac-Sinovac/Butantan,Vacina_86.bin,45
+85,Vacina Covid-19 - Covishield,Vacina_85.bin,18002
+86,Covid-19-Coronavac-Sinovac/Butantan,Vacina_86.bin,80072
+89,Covid-19-AstraZeneca,Vacina_89.bin,1926

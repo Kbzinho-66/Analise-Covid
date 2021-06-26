@@ -1,29 +1,35 @@
 from pymongo import MongoClient
 
+client = MongoClient('localhost', 27017)
+db = client.Covid2
+registries = db.Registros
+
+
 def main():
     while True:
         menu()
-        
-        awnser = int(input("Escolha uma opção:"))
-        if awnser < 0 or awnser > 5:
+
+        answer = int(input("Escolha uma opção:"))
+        if answer < 0 or answer > 5:
             continue
-        
-        if awnser == 1:
+
+        if answer == 1:
             search_by_code()
             continue
-        elif awnser == 2:
+        elif answer == 2:
             search_by_city()
             continue
-        elif awnser == 3:
+        elif answer == 3:
             search_by_date()
             continue
-        elif awnser == 4:
+        elif answer == 4:
             search_by_vaccine()
             continue
-        elif awnser == 5:
+        elif answer == 5:
             prove_hypothesis()
             continue
-        elif awnser == 0:
+        elif answer == 0:
+            client.close()
             break
 
 
@@ -36,23 +42,77 @@ def menu():
     print("5) Provar hipóteses.")
     print("0) Sair.")
 
+
 def inner_menu():
     print("Escolha uma opção:")
     print("1) Procurar um código nesses registros.")
     print("2) Mostrar alguns dos registros.")
     print("0) Voltar para o menu principal.")
 
+
 def search_by_code():
+    code = int(input("Insira o código a ser pesquisado:"))
+    patient = registries.find_one({'Paciente_Codigo': code})
+
+    print("======================================\n")
+    print_patient(patient)
     pass
 
+
 def search_by_city():
-    print("Insira o nome da cidade (Sem acentos):")
-    
+    city = input("Insira o nome da cidade (Sem acentos):")
+    patients = registries.find({'CidadeAplicacaoVacina': city.upper()})
+
+    # TODO(Implementar o segundo nível de pesquisa)
+
+    print("======================================\n")
+    for patient in patients:
+        print_patient(patient)
+
+
 def search_by_date():
+    date = input("Insira a data a ser pesquisada no formato YYYY-MM-DD:")
+    # TODO(Colocar um regex pra verificar se é uma data válida)
+
+    patients = registries.find(
+        {'$or': [
+            {'Data_Aplicacao': f"{date}T00:00:00.000Z"},
+            {'Data_Aplicacao': f"{date}T03:00:00.000Z"}
+        ]}
+    )
+
+    # TODO(Implementar o segundo nível de pesquisa)
+
+    print("======================================\n")
+    for patient in patients:
+        print_patient(patient)
     pass
+
 
 def search_by_vaccine():
     pass
 
+
 def prove_hypothesis():
     pass
+
+
+def print_patient(patient):
+    code = patient['Paciente_Codigo']
+    age = patient['Idade']
+    birthday = patient['DataNascimento']
+    sex = patient['SexoBiologico']
+    category = patient['Categoria_Nome']
+    vaccine = patient['Vacina_Nome']
+
+    print(f"Código do paciente: {code}")
+    print(f"Idade: {age}")
+    print(f"Data de nascimento: {birthday}")
+    print(f"Sexo Biológico: {sex} \n")
+    print(f"Categoria de vacinação: {category}")
+    print(f"Vacina utilizada: {vaccine}\n")
+    print("======================================\n")
+
+
+if __name__ == '__main__':
+    main()
