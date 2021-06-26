@@ -1,9 +1,5 @@
-from pymongo import MongoClient
-
-client = MongoClient('localhost', 27017)
-db = client.Covid2
-registries = db.Registros
-
+# from pymongo import MongoClient
+from database_handler import DatabaseHandler
 
 def main():
     while True:
@@ -29,7 +25,7 @@ def main():
             prove_hypothesis()
             continue
         elif answer == 0:
-            client.close()
+            handler.close()
             break
 
 
@@ -61,7 +57,7 @@ def search_by_code():
 
 def search_by_city():
     city = input("Insira o nome da cidade (Sem acentos):")
-    patients = registries.find({'CidadeAplicacaoVacina': city.upper()})
+    patients = handler.search_query({'CidadeAplicacaoVacina': city.upper()})
 
     # TODO(Implementar o segundo nível de pesquisa)
 
@@ -73,8 +69,9 @@ def search_by_city():
 def search_by_date():
     date = input("Insira a data a ser pesquisada no formato YYYY-MM-DD:")
     # TODO(Colocar um regex pra verificar se é uma data válida)
+    # /^\d{4}-\d{2}-\d{2}$/
 
-    patients = registries.find(
+    patients = handler.search_query(
         {'$or': [
             {'Data_Aplicacao': f"{date}T00:00:00.000Z"},
             {'Data_Aplicacao': f"{date}T03:00:00.000Z"}
@@ -115,4 +112,11 @@ def print_patient(patient):
 
 
 if __name__ == '__main__':
+
+    # só muda pros teus banco de dados e coleção
+
+    handler = DatabaseHandler.handler_factory("covid", "registers")
+    registries = handler.get_collection()
+
+
     main()
