@@ -1,4 +1,5 @@
 # from pymongo import MongoClient
+import re
 from database_handler import DatabaseHandler
 
 def main():
@@ -69,21 +70,25 @@ def search_by_city():
 def search_by_date():
     date = input("Insira a data a ser pesquisada no formato YYYY-MM-DD:")
     # TODO(Colocar um regex pra verificar se é uma data válida)
-    # /^\d{4}-\d{2}-\d{2}$/
+    date_pattern = "/^\d{4}-\d{2}-\d{2}$/"
+    if re.match(date_pattern, date):
+        patients = handler.search_query(
+            {'$or': [
+                {'Data_Aplicacao': f"{date}T00:00:00.000Z"},
+                {'Data_Aplicacao': f"{date}T03:00:00.000Z"}
+            ]}
+        )
 
-    patients = handler.search_query(
-        {'$or': [
-            {'Data_Aplicacao': f"{date}T00:00:00.000Z"},
-            {'Data_Aplicacao': f"{date}T03:00:00.000Z"}
-        ]}
-    )
+        # TODO(Implementar o segundo nível de pesquisa)
 
-    # TODO(Implementar o segundo nível de pesquisa)
+        print("======================================\n")
+        for patient in patients:
+            print_patient(patient)
+        pass
 
-    print("======================================\n")
-    for patient in patients:
-        print_patient(patient)
-    pass
+    else:
+        print("Data inválida")
+        return
 
 
 def search_by_vaccine():

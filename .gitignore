@@ -6,3 +6,4 @@ src/RS_Mini.bin
 .json
 .bin
 src/Indices_Vacina_RS.txt
+mongo/__pycache__
