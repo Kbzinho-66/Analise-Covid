@@ -1,0 +1,39 @@
+
+// Escolher a coleção certa
+use('Covid');
+
+// Encontrar um paciente pelo seu código
+> db.Registros.find( {Paciente_Codigo: 4} )
+// Encontrar todos os pacientes que se vacinaram em uma cidade
+> db.Registros.find( {CidadeAplicacaoVacina: "TAQUARI"} )
+// Encontrar todos os pacientes que se vacinaram em uma data específica
+> db.Registros.find(
+  { $or: [
+    { Data_Aplicacao: "2021-02-19T00:00:00.000Z" },
+    { Data_Aplicacao: "2021-02-19T03:00:00.000Z" }
+  ]}
+)
+// Encontrar todos que foram vacinados com uma vacina
+> db.Registros.find(
+  { Vacina_Nome: "Vacina Covid-19 - Covishield" }
+)
+
+// Hipótese 1: Coronavac é a vacina mais usada no Brasil
+> db.Registros.find(
+  { Vacina_Nome: "Covid-19-Coronavac-Sinovac/Butantan" }
+  
+).itcount()
+
+// Hipótese 2: A quantidade de pessoas vacinadas é proporcional à população da cidade
+> db.Registros.aggregate(
+  [
+    { $group: { _id: '$CidadeAplicacaoVacina', count: { $sum: 1} } },
+    { $sort: { count: -1 } },
+    { $limit: 5}
+  ] 
+)
+
+// Hipótese 3: A categoria mais vacinada é a de trabalhadores de saúde
+> db.Registros.find(
+  { Categoria_Nome: "Trabalhadores de Saúde" }
+).itcount()
