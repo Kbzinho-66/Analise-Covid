@@ -1,3 +1,4 @@
+import random
 import re
 import time
 from database_handler import DatabaseHandler
@@ -5,11 +6,7 @@ from database_handler import DatabaseHandler
 
 def main():
     while True:
-        menu()
-
-        answer = int(input("Escolha uma opção:"))
-        if answer < 0 or answer > 5:
-            continue
+        answer = menu()
 
         if answer == 1:
             search_by_code()
@@ -32,6 +29,7 @@ def main():
 
 
 def menu():
+    print("======================================")
     print("Escolha uma opção a seguir:")
     print("1) Procurar um registro pelo seu código.")
     print("2) Procurar todos os registros de uma cidade.")
@@ -40,17 +38,32 @@ def menu():
     print("5) Provar hipóteses.")
     print("0) Sair.")
 
+    while True:
+        answer = int(input("Escolha uma opção:"))
+        if answer < 0 or answer > 5:
+            continue
+        else:
+            return answer
+
 
 def inner_menu():
-    print("Escolha uma opção:")
+    print("Pesquisa secundária:")
     print("1) Procurar um código nesses registros.")
-    print("2) Mostrar alguns dos registros.")
+    print("2) Mostrar registros aleatórios.")
     print("0) Voltar para o menu principal.")
+
+    while True:
+        answer = int(input("Escolha uma opção:"))
+        if answer < 0 or answer > 2:
+            continue
+        else:
+            return answer
 
 
 def search_by_code():
     code = int(input("Insira o código a ser pesquisado: "))
-    patient = registries.find_one({'Paciente_Codigo': code})
+    query = {'Paciente_Codigo': code}
+    patient = registries.find_one(query)
 
     print("======================================\n")
     print_patient(patient)
@@ -60,31 +73,26 @@ def search_by_code():
 
 def search_by_city():
     city = input("Insira o nome da cidade (Sem acentos):")
-    patients = handler.search_query({'CidadeAplicacaoVacina': city.upper()})
+    query = {'CidadeAplicacaoVacina': city.upper()}
+    patients = handler.search_query(query)
 
-    # TODO(Implementar o segundo nível de pesquisa)
-
-    print("======================================\n")
-    for patient in patients:
-        print_patient(patient)
+    secondary_search(patients, query)
 
 
 def search_by_date():
     date = input("Insira a data a ser pesquisada no formato YYYY-MM-DD: ")
-    date_pattern = r"/^\d{4}-\d{2}-\d{2}$/"
+    date_pattern = r"([12]\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01]))"
+    query = {
+        '$or': [
+            {'Data_Aplicacao': f"{date}T00:00:00.000Z"},
+            {'Data_Aplicacao': f"{date}T03:00:00.000Z"}
+        ]
+    }
+
     if re.match(date_pattern, date):
-        patients = handler.search_query(
-            {'$or': [
-                {'Data_Aplicacao': f"{date}T00:00:00.000Z"},
-                {'Data_Aplicacao': f"{date}T03:00:00.000Z"}
-            ]}
-        )
+        patients = handler.search_query(query)
 
-        # TODO(Implementar o segundo nível de pesquisa)
-
-        print("======================================\n")
-        for patient in patients:
-            print_patient(patient)
+        secondary_search(patients, query)
 
     else:
         print("Data inválida")
@@ -100,12 +108,42 @@ def search_by_vaccine():
         index += 1
 
     index = int(input("Escolha a vacina a ser pesquisada: "))
-    patients = registries.find(
-        {'Vacina_Nome': vaccines[index]}
-    )
-    # TODO (Implementar o segundo nível de pesquisa)
-    for patient in patients:
-        print_patient(patient)
+    query = {'Vacina_Nome': vaccines[index]}
+    patients = handler.search_query(query)
+
+    secondary_search(patients, query)
+
+
+def secondary_search(patients, query):
+
+    print()
+    while True:
+        answer = inner_menu()
+
+        if answer == 1:
+            code = int(input("Insira o código: "))
+            query['Paciente_Codigo'] = code
+            patient = handler.search_element(query)
+
+            if patient is not None:
+                print("======================================")
+                print_patient(patient)
+            else:
+                print("Código não encontrado\n")
+            continue
+
+        elif answer == 2:
+            print("======================================")
+
+            for patient in patients:
+                if int(random.random() * 1000) % 256 == 0:
+                    print_patient(patient)
+
+            patients.rewind()
+            continue
+
+        elif answer == 0:
+            break
 
 
 def prove_hypotheses():
@@ -177,13 +215,11 @@ def print_patient(patient):
     print(f"Sexo Biológico: {sex} \n")
     print(f"Cidade de vacinação: {city}")
     print(f"Categoria de vacinação: {category}")
-    print(f"Vacina utilizada: {vaccine}\n")
-    print("======================================\n")
+    print(f"Vacina utilizada: {vaccine}")
+    print("======================================")
 
 
 if __name__ == '__main__':
-
-    # só muda pros teus banco de dados e coleção
 
     # handler = DatabaseHandler.handler_factory("covid", "registers")
     handler = DatabaseHandler.handler_factory("Covid2", "Registros")
