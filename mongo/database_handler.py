@@ -115,6 +115,9 @@ class DatabaseHandler(object):
         except pymongo.errors.InvalidName:
             print("nome da coleção não pode ser vazio")
 
+    def get_collection_size(self, collection=None):
+        return self.get_collection(collection)
+
     def close(self):
         self._client.close()
 

@@ -2,7 +2,7 @@ import random
 import re
 import time
 from database_handler import DatabaseHandler
-
+from cryptography.fernet import Fernet
 
 def main():
     while True:
@@ -203,11 +203,13 @@ def hypothesis_three():
 def print_patient(patient):
     code = patient['Paciente_Codigo']
     age = patient['Idade']
-    birthday = patient['DataNascimento']
+    e_birthday = patient['DataNascimento']
     sex = patient['SexoBiologico']
     city = patient['CidadeAplicacaoVacina']
     category = patient['Categoria_Nome']
     vaccine = patient['Vacina_Nome']
+
+    birthday = decrypt(e_birthday)
 
     print(f"Código do paciente: {code}")
     print(f"Idade: {age}")
@@ -218,11 +220,42 @@ def print_patient(patient):
     print(f"Vacina utilizada: {vaccine}")
     print("======================================")
 
+def encrypt_fields():
+    encrypted_collection = handler.get_collection("encrypted_registers")
+    results = encrypted_collection.count_documents({})
+
+    if results == 0:
+        print('Criptografando...')
+        for entry in registries.find():
+            new_entry = entry
+            new_entry['DataNascimento'] = crypto_key.encrypt(str.encode(new_entry['DataNascimento']))
+            encrypted_collection.insert(new_entry)
+
+def decrypt(field):
+    return crypto_key.decrypt(field).decode('utf-8')
+
+
+def generate_key():
+    key_collection = handler.get_collection('ey')
+    # print(key_collection.find_one())
+    key = key_collection.find_one()
+    
+    if key is None: 
+        key = Fernet.generate_key()
+        key_collection.insert({
+            'Chave': key
+        })
+
+    else:
+        key = key['Chave']
+
+    return Fernet(key)
 
 if __name__ == '__main__':
 
-    # handler = DatabaseHandler.handler_factory("covid", "registers")
-    handler = DatabaseHandler.handler_factory("Covid2", "Registros")
-    registries = handler.get_collection()
-
+    handler = DatabaseHandler.handler_factory("covid", "registers")
+    # handler = DatabaseHandler.handler_factory("Covid2", "Registros")
+    crypto_key = generate_key()
+    encrypt_fields()
+    registries = handler.get_collection("encrypted_registers")
     main()
