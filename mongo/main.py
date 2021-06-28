@@ -1,8 +1,10 @@
+import pprint
 import random
 import re
 import time
 from database_handler import DatabaseHandler
 from cryptography.fernet import Fernet
+
 
 def main():
     while True:
@@ -29,7 +31,6 @@ def main():
 
 
 def menu():
-    print("======================================")
     print("Escolha uma opção a seguir:")
     print("1) Procurar um registro pelo seu código.")
     print("2) Procurar todos os registros de uma cidade.")
@@ -63,9 +64,9 @@ def inner_menu():
 def search_by_code():
     code = int(input("Insira o código a ser pesquisado: "))
     query = {'Paciente_Codigo': code}
-    patient = e_registries.find_one(query)
+    patient = registries.find_one(query)
 
-    print("======================================\n")
+    print("======================================")
     print_patient(patient)
     time.sleep(2)
     pass
@@ -100,7 +101,7 @@ def search_by_date():
 
 
 def search_by_vaccine():
-    vaccines = e_registries.find().distinct('Vacina_Nome')
+    vaccines = registries.find().distinct('Vacina_Nome')
 
     index = 0
     for v in vaccines:
@@ -128,17 +129,17 @@ def secondary_search(patients, query):
             if patient is not None:
                 print("======================================")
                 print_patient(patient)
+                time.sleep(2)
             else:
                 print("Código não encontrado\n")
+
             continue
 
         elif answer == 2:
             print("======================================")
-
-            for patient in patients:
+            for p in patients:
                 if int(random.random() * 1000) % 256 == 0:
-                    print_patient(patient)
-
+                    print_patient(p)
             patients.rewind()
             continue
 
@@ -154,7 +155,7 @@ def prove_hypotheses():
 
 def hypothesis_one():
     print("\nHipótese 1: Coronavac é a vacina mais usada no Brasil")
-    vaccines = e_registries.aggregate(
+    vaccines = registries.aggregate(
         [
             {'$group': {'_id': '$Vacina_Nome', 'count': {'$sum': 1}}},
             {'$sort': {'count': -1}}
@@ -169,7 +170,7 @@ def hypothesis_one():
 
 def hypothesis_two():
     print("\nHipótese 2: A quantidade de pessoas vacinadas é proporcional à população da cidade")
-    cities = e_registries.aggregate(
+    cities = registries.aggregate(
         [
             {'$group': {'_id': '$CidadeAplicacaoVacina', 'count': {'$sum': 1}}},
             {'$sort': {'count': -1}},
@@ -185,7 +186,7 @@ def hypothesis_two():
 
 def hypothesis_three():
     print("\nHipótese 3: A categoria mais vacinada é a de trabalhadores de saúde")
-    categories = e_registries.aggregate(
+    categories = registries.aggregate(
         [
             {'$group': {'_id': '$Categoria_Nome', 'count': {'$sum': 1}}},
             {'$sort': {'count': -1}},
@@ -220,27 +221,33 @@ def print_patient(patient):
     print(f"Vacina utilizada: {vaccine}")
     print("======================================")
 
+
 def encrypt_fields():
-    results = e_registries.count_documents({})
+    original_collection = handler.get_collection()
+    encrypted_collection = handler.get_collection(f"encrypted_{handler.collection_name}")
+    results = encrypted_collection.count_documents({})
 
     if results == 0:
         print('Criptografando...')
-        for entry in registries.find():
+        for entry in original_collection.find():
             new_entry = entry
             new_entry['DataNascimento'] = crypto_key.encrypt(str.encode(new_entry['DataNascimento']))
-            e_registries.insert(new_entry)
+            encrypted_collection.insert_one(new_entry)
+
+    handler.collection_name = f"encrypted_{handler.collection_name}"
+
 
 def decrypt(field):
     return crypto_key.decrypt(field).decode('utf-8')
 
 
 def generate_key():
-    key_collection = handler.get_collection('key')
+    key_collection = handler.get_collection(f"key_{handler.collection_name}")
     key = key_collection.find_one()
-    
-    if key is None: 
+
+    if key is None:
         key = Fernet.generate_key()
-        key_collection.insert({
+        key_collection.insert_one({
             'Chave': key
         })
 
@@ -249,12 +256,14 @@ def generate_key():
 
     return Fernet(key)
 
-if __name__ == '__main__':
 
-    handler = DatabaseHandler.handler_factory("covid", "encrypted_registers")
-    # handler = DatabaseHandler.handler_factory("Covid2", "Registros")
+if __name__ == '__main__':
+    # Para usar um db ou uma coleção diferente, mudar somente essa linha
+    # handler = DatabaseHandler.handler_factory("covid", "registers")
+    handler = DatabaseHandler.handler_factory("Covid", "Pequeno")
+
     crypto_key = generate_key()
-    registries = handler.get_collection("registers")
-    e_registries = handler.get_collection()
     encrypt_fields()
+
+    registries = handler.get_collection()
     main()

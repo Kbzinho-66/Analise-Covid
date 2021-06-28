@@ -1,11 +1,9 @@
-import re
 import pymongo
 import pprint
 from pymongo import MongoClient
 
 
 class DatabaseHandler(object):
-
     """
     Classe responsável por realizar comunicação e gerência com
     o banco de dados MongoDB 
@@ -123,7 +121,8 @@ class DatabaseHandler(object):
 
     def search_query(self, query):
         """
-        Função para executar uma query expecificada
+        Função que executa a query passada e retorna um Cursor
+        com todos os resultados encontrados
 
         Params: 
             query (dict): query para ser executada
@@ -133,13 +132,9 @@ class DatabaseHandler(object):
 
     def search_element(self, query):
         """ 
-        Acho que não precisaria dessa função pra pesquisar só um,
-        mas teria que ver a diferença do find e find_one
+        Função que executa a query passada e retorna o primeiro
+        documento que corresponde à mesma
         """
 
         collection = self.get_collection()
         return collection.find_one(query)
-
-if __name__ == "__main__":
-    handler = DatabaseHandler.handler_factory("covid", "registers")
-    print(handler.get_collection())
