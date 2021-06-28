@@ -63,7 +63,7 @@ def inner_menu():
 def search_by_code():
     code = int(input("Insira o código a ser pesquisado: "))
     query = {'Paciente_Codigo': code}
-    patient = registries.find_one(query)
+    patient = e_registries.find_one(query)
 
     print("======================================\n")
     print_patient(patient)
@@ -100,7 +100,7 @@ def search_by_date():
 
 
 def search_by_vaccine():
-    vaccines = registries.find().distinct('Vacina_Nome')
+    vaccines = e_registries.find().distinct('Vacina_Nome')
 
     index = 0
     for v in vaccines:
@@ -154,7 +154,7 @@ def prove_hypotheses():
 
 def hypothesis_one():
     print("\nHipótese 1: Coronavac é a vacina mais usada no Brasil")
-    vaccines = registries.aggregate(
+    vaccines = e_registries.aggregate(
         [
             {'$group': {'_id': '$Vacina_Nome', 'count': {'$sum': 1}}},
             {'$sort': {'count': -1}}
@@ -169,7 +169,7 @@ def hypothesis_one():
 
 def hypothesis_two():
     print("\nHipótese 2: A quantidade de pessoas vacinadas é proporcional à população da cidade")
-    cities = registries.aggregate(
+    cities = e_registries.aggregate(
         [
             {'$group': {'_id': '$CidadeAplicacaoVacina', 'count': {'$sum': 1}}},
             {'$sort': {'count': -1}},
@@ -185,7 +185,7 @@ def hypothesis_two():
 
 def hypothesis_three():
     print("\nHipótese 3: A categoria mais vacinada é a de trabalhadores de saúde")
-    categories = registries.aggregate(
+    categories = e_registries.aggregate(
         [
             {'$group': {'_id': '$Categoria_Nome', 'count': {'$sum': 1}}},
             {'$sort': {'count': -1}},
@@ -221,23 +221,21 @@ def print_patient(patient):
     print("======================================")
 
 def encrypt_fields():
-    encrypted_collection = handler.get_collection("encrypted_registers")
-    results = encrypted_collection.count_documents({})
+    results = e_registries.count_documents({})
 
     if results == 0:
         print('Criptografando...')
         for entry in registries.find():
             new_entry = entry
             new_entry['DataNascimento'] = crypto_key.encrypt(str.encode(new_entry['DataNascimento']))
-            encrypted_collection.insert(new_entry)
+            e_registries.insert(new_entry)
 
 def decrypt(field):
     return crypto_key.decrypt(field).decode('utf-8')
 
 
 def generate_key():
-    key_collection = handler.get_collection('ey')
-    # print(key_collection.find_one())
+    key_collection = handler.get_collection('key')
     key = key_collection.find_one()
     
     if key is None: 
@@ -253,9 +251,10 @@ def generate_key():
 
 if __name__ == '__main__':
 
-    handler = DatabaseHandler.handler_factory("covid", "registers")
+    handler = DatabaseHandler.handler_factory("covid", "encrypted_registers")
     # handler = DatabaseHandler.handler_factory("Covid2", "Registros")
     crypto_key = generate_key()
+    registries = handler.get_collection("registers")
+    e_registries = handler.get_collection()
     encrypt_fields()
-    registries = handler.get_collection("encrypted_registers")
     main()
