@@ -49,8 +49,8 @@ def menu():
 
 def inner_menu():
     print("Pesquisa secundária:")
-    print("1) Procurar um código nesses registros.")
-    print("2) Mostrar registros aleatórios.")
+    print("1) Mostrar registros aleatórios.")
+    print("2) Procurar um código nesses registros.")
     print("0) Voltar para o menu principal.")
 
     while True:
@@ -64,7 +64,7 @@ def inner_menu():
 def search_by_code():
     code = int(input("Insira o código a ser pesquisado: "))
     query = {'Paciente_Codigo': code}
-    patient = registries.find_one(query)
+    patient = handler.search_element(query)
 
     print("======================================")
     print_patient(patient)
@@ -73,7 +73,7 @@ def search_by_code():
 
 
 def search_by_city():
-    city = input("Insira o nome da cidade (Sem acentos):")
+    city = input("Insira o nome da cidade (Sem acentos): ")
     query = {'CidadeAplicacaoVacina': city.upper()}
     patients = handler.search_query(query)
 
@@ -122,9 +122,22 @@ def secondary_search(patients, query):
         answer = inner_menu()
 
         if answer == 1:
+            print("======================================")
+            # FIXME: Por alguma força do universo, se chamar essa parte depois
+            #   de procurar um código, não entra no laço.
+
+            _patients = patients.clone()
+            for patient in _patients:
+                if int(random.random() * 1000) % 256 == 0:
+                    print_patient(patient)
+
+            continue
+
+        elif answer == 2:
             code = int(input("Insira o código: "))
-            query['Paciente_Codigo'] = code
-            patient = handler.search_element(query)
+            _query = query
+            _query['Paciente_Codigo'] = code
+            patient = handler.search_element(_query)
 
             if patient is not None:
                 print("======================================")
@@ -133,14 +146,6 @@ def secondary_search(patients, query):
             else:
                 print("Código não encontrado\n")
 
-            continue
-
-        elif answer == 2:
-            print("======================================")
-            for p in patients:
-                if int(random.random() * 1000) % 256 == 0:
-                    print_patient(p)
-            patients.rewind()
             continue
 
         elif answer == 0:
