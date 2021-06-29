@@ -108,11 +108,16 @@ def search_by_vaccine():
         print(f"{index}) {v}")
         index += 1
 
-    index = int(input("Escolha a vacina a ser pesquisada: "))
-    query = {'Vacina_Nome': vaccines[index]}
-    patients = handler.search_query(query)
+    answer = int(input("Escolha a vacina a ser pesquisada: "))
+    if 0 < answer < index:
+        query = {'Vacina_Nome': vaccines[answer]}
+        patients = handler.search_query(query)
 
-    secondary_search(patients, query)
+        secondary_search(patients, query)
+
+    else:
+        print("Código inválido")
+        return
 
 
 def secondary_search(patients, query):
